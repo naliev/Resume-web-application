@@ -1,3 +1,4 @@
+package com.startjava.lesson_1;
 /**
  * Initial resume class
  */
