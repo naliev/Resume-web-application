@@ -8,7 +8,7 @@ import java.util.Arrays;
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    private Resume[] storage = new Resume[10000];
+    private final Resume[] storage = new Resume[10000];
     private int size = 0;
 
     /**
@@ -18,7 +18,7 @@ public class ArrayStorage {
         return Arrays.copyOf(storage, size);
     }
 
-    public int getSize() {
+    public int size() {
         return size;
     }
 
@@ -28,52 +28,49 @@ public class ArrayStorage {
     }
 
     public void update(Resume resume) {
-        int ix = indexOf(resume.toString());
-        if (ix != -1) {
-            System.out.println(resume + " updated!");
-        } else {
+        int index = findInStorage(resume.getUuid());
+        if (index == -1) {
             System.out.println("No resume with " + resume + " uuid");
+        } else {
+            storage[index] = resume;
+            System.out.println(resume + " updated!");
         }
     }
 
     public void save(Resume resume) {
-        int ix = indexOf(resume.toString());
-        if (ix != -1) {
+        int index = findInStorage(resume.getUuid());
+        if (index != -1) {
             System.out.println("A resume with " + resume + " uuid is already in the storage");
-            return;
-        }
-        if (size == storage.length) {
+        } else if (size == storage.length) {
             System.out.println("Storage is full");
-            return;
+        } else {
+            storage[size++] = resume;
         }
-        storage[size++] = resume;
     }
 
     public Resume get(String uuid) {
-        int ix = indexOf(uuid);
-        if (ix != -1) {
-            return storage[ix];
+        int index = findInStorage(uuid);
+        if (index != -1) {
+            return storage[index];
+        } else {
+            System.out.println("No resume with " + uuid + " uuid");
+            return null;
         }
-        System.out.println("No resume with " + uuid + " uuid");
-        return null;
     }
 
     public void delete(String uuid) {
-        int ix = indexOf(uuid);
-        if (ix != -1) {
-            size--;
-            for (; ix < size; ix++) {
-                storage[ix] = storage[ix + 1];
-            }
-            storage[size] = null;
-        } else {
+        int index = findInStorage(uuid);
+        if (index == -1) {
             System.out.println("No resume with " + uuid + " uuid");
+        } else {
+            storage[index] = storage[size - 1];
+            storage[--size] = null;
         }
     }
 
-    private int indexOf(String uuid) {
+    private int findInStorage(String uuid) {
         for (int i = 0; i < size; i++) {
-            if (storage[i].toString().equals(uuid)) {
+            if (storage[i].getUuid().equals(uuid)) {
                 return i;
             }
         }
