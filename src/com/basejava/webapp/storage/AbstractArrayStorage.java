@@ -5,7 +5,7 @@ import com.basejava.webapp.model.Resume;
 import java.util.Arrays;
 
 public abstract class AbstractArrayStorage implements Storage {
-    protected static final int STORAGE_LIMIT = 10000;
+    protected static final int STORAGE_LIMIT = 3;
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
 
@@ -62,9 +62,9 @@ public abstract class AbstractArrayStorage implements Storage {
         if (index < 0) {
             System.out.println("No resume with " + uuid + " uuid");
         } else {
-            shiftDeletedResumes(index);
-            storage[size] = null;
+            shiftDeletedElement(index);
             size--;
+            storage[size] = null;
         }
     }
 
@@ -72,6 +72,5 @@ public abstract class AbstractArrayStorage implements Storage {
 
     protected abstract void insertResume(Resume resume, int index);
 
-    protected abstract void shiftDeletedResumes(int index);
-
+    protected abstract void shiftDeletedElement(int index);
 }

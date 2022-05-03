@@ -22,9 +22,7 @@ public class ArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected void shiftDeletedResumes(int index) {
+    protected void shiftDeletedElement(int index) {
         storage[index] = storage[size - 1];
     }
-
-
 }
