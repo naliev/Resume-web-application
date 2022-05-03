@@ -22,7 +22,7 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected void shiftDeletedResumes(int index) {
+    protected void shiftDeletedElement(int index) {
         if (index != size - 1) {
             System.arraycopy(storage, index + 1, storage, index, size - index - 1);
         }
