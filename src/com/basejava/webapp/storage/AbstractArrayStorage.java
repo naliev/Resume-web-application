@@ -1,11 +1,12 @@
 package com.basejava.webapp.storage;
 
+import com.basejava.webapp.exception.*;
 import com.basejava.webapp.model.Resume;
 
 import java.util.Arrays;
 
 public abstract class AbstractArrayStorage implements Storage {
-    protected static final int STORAGE_LIMIT = 3;
+    protected static final int STORAGE_LIMIT = 10000;
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
 
@@ -25,8 +26,7 @@ public abstract class AbstractArrayStorage implements Storage {
         if (index >= 0) {
             return storage[index];
         } else {
-            System.out.println("No resume with " + uuid + " uuid");
-            return null;
+            throw new NotExistStorageException(uuid);
         }
     }
 
@@ -38,7 +38,7 @@ public abstract class AbstractArrayStorage implements Storage {
     public void update(Resume resume) {
         int index = findIndex(resume.getUuid());
         if (index < 0) {
-            System.out.println("No resume with " + resume + " uuid");
+            throw new NotExistStorageException(resume.getUuid());
         } else {
             storage[index] = resume;
             System.out.println(resume + " updated!");
@@ -48,9 +48,9 @@ public abstract class AbstractArrayStorage implements Storage {
     public void save(Resume resume) {
         int index = findIndex(resume.getUuid());
         if (index >= 0) {
-            System.out.println("A resume with " + resume + " uuid is already in the storage");
+            throw new ExistStorageException(resume.getUuid());
         } else if (size == storage.length) {
-            System.out.println("Storage is full");
+            throw new StorageException("Storage overflow", resume.getUuid());
         } else {
             insertResume(resume, index);
             size++;
@@ -60,7 +60,7 @@ public abstract class AbstractArrayStorage implements Storage {
     public void delete(String uuid) {
         int index = findIndex(uuid);
         if (index < 0) {
-            System.out.println("No resume with " + uuid + " uuid");
+            throw new NotExistStorageException(uuid);
         } else {
             shiftDeletedElement(index);
             size--;
