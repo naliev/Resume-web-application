@@ -6,7 +6,11 @@ package com.basejava.webapp.model;
 public class Resume implements Comparable<Resume> {
 
     // Unique identifier
-    private String uuid;
+    final private String uuid;
+
+    public Resume(String uuid) {
+        this.uuid = uuid;
+    }
 
     @Override
     public String toString() {
@@ -15,10 +19,6 @@ public class Resume implements Comparable<Resume> {
 
     public String getUuid() {
         return uuid;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
     }
 
     @Override
