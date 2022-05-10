@@ -5,7 +5,7 @@ import com.basejava.webapp.model.Resume;
 
 import java.util.Arrays;
 
-public abstract class AbstractArrayStorage implements Storage {
+public abstract class AbstractArrayStorage extends AbstractStorage {
     protected static final int STORAGE_LIMIT = 10000;
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
@@ -21,51 +21,49 @@ public abstract class AbstractArrayStorage implements Storage {
         return Arrays.copyOf(storage, size);
     }
 
-    public Resume get(String uuid) {
-        int index = findIndex(uuid);
-        if (index >= 0) {
-            return storage[index];
-        } else {
-            throw new NotExistStorageException(uuid);
-        }
-    }
-
     public void clear() {
         Arrays.fill(storage, 0, size, null);
         size = 0;
     }
 
-    public void update(Resume resume) {
-        int index = findIndex(resume.getUuid());
-        if (index < 0) {
-            throw new NotExistStorageException(resume.getUuid());
-        } else {
-            storage[index] = resume;
-            System.out.println(resume + " updated!");
-        }
+    @Override
+    protected Resume doGet(Object searchKey) {
+        return storage[(int) searchKey];
     }
 
-    public void save(Resume resume) {
-        int index = findIndex(resume.getUuid());
-        if (index >= 0) {
-            throw new ExistStorageException(resume.getUuid());
-        } else if (size == storage.length) {
-            throw new StorageException("Storage overflow", resume.getUuid());
+    @Override
+    protected void doUpdate(Resume value, Object searchKey) {
+        storage[(int) searchKey] = value;
+        System.out.println(value + " updated!");
+    }
+
+    @Override
+    protected void doSave(Resume value, Object searchKey) {
+        if (size == storage.length) {
+            throw new StorageException("Storage overflow", value.getUuid());
         } else {
-            insertResume(resume, index);
+            insertResume(value, (int) searchKey);
             size++;
         }
     }
 
-    public void delete(String uuid) {
-        int index = findIndex(uuid);
-        if (index < 0) {
-            throw new NotExistStorageException(uuid);
-        } else {
-            shiftDeletedElement(index);
-            size--;
-            storage[size] = null;
-        }
+    @Override
+    protected void doDelete(Object searchKey) {
+        shiftDeletedElement((int) searchKey);
+        size--;
+        storage[size] = null;
+    }
+
+    @Override
+    protected Object getSearchKey(String uuid) {
+        return findIndex(uuid);
+    }
+
+    @Override
+    protected boolean isValueExist(Object searchKey) {
+        if ((int) searchKey >= 0) {
+            return !(storage[(int) searchKey] == null);
+        } else return false;
     }
 
     protected abstract int findIndex(String uuid);

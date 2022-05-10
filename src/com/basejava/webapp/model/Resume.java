@@ -24,7 +24,9 @@ public class Resume implements Comparable<Resume> {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Resume resume)) return false;
+        if (!(o instanceof Resume)) return false;
+
+        Resume resume = (Resume) o;
 
         return uuid.equals(resume.uuid);
     }
