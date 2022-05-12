@@ -49,7 +49,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
 
     @Override
     protected void doDelete(Object searchKey) {
-        shiftDeletedElement((int) searchKey);
+        fillDeletedElement((int) searchKey);
         size--;
         storage[size] = null;
     }
@@ -60,15 +60,17 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected boolean isValueExist(Object searchKey) {
+    protected boolean isExist(Object searchKey) {
         if ((int) searchKey >= 0) {
             return !(storage[(int) searchKey] == null);
-        } else return false;
+        } else {
+            return false;
+        }
     }
 
     protected abstract int findIndex(String uuid);
 
     protected abstract void insertResume(Resume resume, int index);
 
-    protected abstract void shiftDeletedElement(int index);
+    protected abstract void fillDeletedElement(int index);
 }
