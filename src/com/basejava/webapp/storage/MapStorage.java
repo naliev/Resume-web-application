@@ -3,10 +3,11 @@ package com.basejava.webapp.storage;
 import com.basejava.webapp.model.Resume;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.TreeMap;
 
 public class MapStorage extends AbstractStorage {
-    protected final TreeMap<Object, Resume> storage = new TreeMap<>();
+    protected final Map<Object, Resume> storage = new TreeMap<>();
 
     @Override
     public int size() {
