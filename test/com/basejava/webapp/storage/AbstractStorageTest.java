@@ -8,15 +8,20 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 public abstract class AbstractStorageTest {
     protected final Storage storage;
     private static final String UUID_1 = "N1";
     private static final String UUID_2 = "N2";
     private static final String UUID_3 = "N3";
+    private static final String FULL_NAME_1 = "Georgy Ivanov";
+    private static final String FULL_NAME_2 = "Maxim Pavlov";
+    private static final String FULL_NAME_3 = "Nikita Aliev";
     private static final String UUID_NOT_EXIST = "dummy";
-    private static final Resume RESUME_1 = new Resume(UUID_1);
-    private static final Resume RESUME_2 = new Resume(UUID_2);
-    private static final Resume RESUME_3 = new Resume(UUID_3);
+    private static final Resume RESUME_1 = new Resume(UUID_1, FULL_NAME_1);
+    private static final Resume RESUME_2 = new Resume(UUID_2, FULL_NAME_2);
+    private static final Resume RESUME_3 = new Resume(UUID_3, FULL_NAME_3);
     private static final Resume RESUME_NEW = new Resume("New");
 
     protected AbstractStorageTest(Storage storage) {
@@ -38,11 +43,11 @@ public abstract class AbstractStorageTest {
     @Test
     void getAll() {
         assertSize(3);
-        Resume[] resumes = storage.getAll();
-        Assertions.assertEquals(3, resumes.length);
-        assertGet(resumes[0]);
-        assertGet(resumes[1]);
-        assertGet(resumes[2]);
+        List<Resume> resumes = storage.getAllSorted();
+        Assertions.assertEquals(3, resumes.size());
+        assertGet(resumes.get(0));
+        assertGet(resumes.get(1));
+        assertGet(resumes.get(2));
     }
 
     @Test
