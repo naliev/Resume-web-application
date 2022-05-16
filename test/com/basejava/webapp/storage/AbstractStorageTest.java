@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
 public abstract class AbstractStorageTest {
@@ -15,9 +16,9 @@ public abstract class AbstractStorageTest {
     private static final String UUID_1 = "N1";
     private static final String UUID_2 = "N2";
     private static final String UUID_3 = "N3";
-    private static final String FULL_NAME_1 = "Georgy Ivanov";
+    private static final String FULL_NAME_1 = "Nikita Aliev";
     private static final String FULL_NAME_2 = "Maxim Pavlov";
-    private static final String FULL_NAME_3 = "Nikita Aliev";
+    private static final String FULL_NAME_3 = "Georgy Ivanov";
     private static final String UUID_NOT_EXIST = "dummy";
     private static final Resume RESUME_1 = new Resume(UUID_1, FULL_NAME_1);
     private static final Resume RESUME_2 = new Resume(UUID_2, FULL_NAME_2);
@@ -41,13 +42,11 @@ public abstract class AbstractStorageTest {
     }
 
     @Test
-    void getAll() {
+    void getAllSorted() {
         assertSize(3);
         List<Resume> resumes = storage.getAllSorted();
         Assertions.assertEquals(3, resumes.size());
-        assertGet(resumes.get(0));
-        assertGet(resumes.get(1));
-        assertGet(resumes.get(2));
+        Assertions.assertEquals(Arrays.asList(RESUME_3, RESUME_2, RESUME_1), resumes);
     }
 
     @Test
