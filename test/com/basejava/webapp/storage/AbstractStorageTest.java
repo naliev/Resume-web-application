@@ -4,9 +4,9 @@ import com.basejava.webapp.exception.ExistStorageException;
 import com.basejava.webapp.exception.NotExistStorageException;
 import com.basejava.webapp.exception.StorageException;
 import com.basejava.webapp.model.Resume;
+import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,20 +29,20 @@ public abstract class AbstractStorageTest {
         this.storage = storage;
     }
 
-    @BeforeEach
-    void setUp() {
+    @Before
+    public void setUp() {
         storage.save(RESUME_1);
         storage.save(RESUME_2);
         storage.save(RESUME_3);
     }
 
     @Test
-    void size() {
+    public void size() {
         assertSize(3);
     }
 
     @Test
-    void getAllSorted() {
+    public void getAllSorted() {
         assertSize(3);
         List<Resume> resumes = storage.getAllSorted();
         Assertions.assertEquals(3, resumes.size());
@@ -50,55 +50,55 @@ public abstract class AbstractStorageTest {
     }
 
     @Test
-    void get() throws NotExistStorageException {
+    public void get() throws NotExistStorageException {
         assertGet(RESUME_1);
         assertGet(RESUME_2);
         assertGet(RESUME_3);
     }
 
     @Test
-    void getNotExist() throws NotExistStorageException {
+    public void getNotExist() throws NotExistStorageException {
         Assertions.assertThrows(NotExistStorageException.class, () -> storage.get(UUID_NOT_EXIST));
     }
 
     @Test
-    void clear() {
+    public void clear() {
         storage.clear();
         assertSize(0);
     }
 
     @Test
-    void update() throws NotExistStorageException {
+    public void update() throws NotExistStorageException {
         storage.update(RESUME_1);
         Assertions.assertTrue((storage.get(RESUME_1.getUuid()) == RESUME_1));
     }
 
     @Test
-    void updateNotExist() throws NotExistStorageException {
+    public void updateNotExist() throws NotExistStorageException {
         Assertions.assertThrows(NotExistStorageException.class, () -> storage.update(RESUME_NEW));
     }
 
     @Test
-    void save() throws StorageException {
+    public void save() throws StorageException {
         storage.save(RESUME_NEW);
         assertSize(4);
         assertGet(RESUME_NEW);
     }
 
     @Test
-    void saveAlreadyExist() throws StorageException {
+    public void saveAlreadyExist() throws StorageException {
         Assertions.assertThrows(ExistStorageException.class, () -> storage.save(RESUME_1));
     }
 
     @Test
-    void delete() throws NotExistStorageException {
+    public void delete() throws NotExistStorageException {
         storage.delete(UUID_2);
         assertSize(2);
         Assertions.assertThrows(NotExistStorageException.class, () -> storage.get(UUID_2));
     }
 
     @Test
-    void deleteNotExist() throws NotExistStorageException {
+    public void deleteNotExist() throws NotExistStorageException {
         Assertions.assertThrows(NotExistStorageException.class, () -> storage.delete(UUID_NOT_EXIST));
     }
 
