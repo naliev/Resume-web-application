@@ -1,6 +1,7 @@
 package com.basejava.webapp;
 
 import com.basejava.webapp.model.Resume;
+import com.basejava.webapp.storage.MapResumeStorage;
 import com.basejava.webapp.storage.MapUuidStorage;
 
 import java.io.BufferedReader;
@@ -13,7 +14,7 @@ import java.util.List;
  * (just run, no need to understand)
  */
 public class MainArray {
-    private final static MapUuidStorage ARRAY_STORAGE = new MapUuidStorage();
+    private final static MapResumeStorage ARRAY_STORAGE = new MapResumeStorage();
 
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
