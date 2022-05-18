@@ -6,7 +6,7 @@ import com.basejava.webapp.model.Resume;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class AbstractArrayStorage extends AbstractStorage {
+public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     protected static final int STORAGE_LIMIT = 10000;
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
@@ -26,42 +26,42 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected Resume doGet(Object searchKey) {
-        return storage[(int) searchKey];
+    protected Resume doGet(Integer searchKey) {
+        return storage[searchKey];
     }
 
     @Override
-    protected void doUpdate(Resume value, Object searchKey) {
-        storage[(int) searchKey] = value;
+    protected void doUpdate(Resume value, Integer searchKey) {
+        storage[searchKey] = value;
         System.out.println(value + " updated!");
     }
 
     @Override
-    protected void doSave(Resume value, Object searchKey) {
+    protected void doSave(Resume value, Integer searchKey) {
         if (size == storage.length) {
             throw new StorageException("Storage overflow", value.getUuid());
         } else {
-            insertResume(value, (int) searchKey);
+            insertResume(value, searchKey);
             size++;
         }
     }
 
     @Override
-    protected void doDelete(Object searchKey) {
-        fillDeletedElement((int) searchKey);
+    protected void doDelete(Integer searchKey) {
+        fillDeletedElement(searchKey);
         size--;
         storage[size] = null;
     }
 
     @Override
-    protected Object getSearchKey(String uuid) {
+    protected Integer getSearchKey(String uuid) {
         return findIndex(uuid);
     }
 
     @Override
-    protected boolean isExist(Object searchKey) {
-        if ((int) searchKey >= 0) {
-            return !(storage[(int) searchKey] == null);
+    protected boolean isExist(Integer searchKey) {
+        if (searchKey >= 0) {
+            return !(storage[searchKey] == null);
         } else {
             return false;
         }
