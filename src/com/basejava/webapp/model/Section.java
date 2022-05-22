@@ -1,6 +1,6 @@
 package com.basejava.webapp.model;
 
-public interface Section {
+public abstract class Section {
     @Override
-    public String toString();
+    public abstract String toString();
 }
