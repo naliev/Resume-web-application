@@ -1,5 +1,6 @@
 package com.basejava.webapp.model;
 
+import java.util.Map;
 import java.util.HashMap;
 
 /**
@@ -9,8 +10,8 @@ public class Resume implements Comparable<Resume> {
     // Unique identifier
     final private String uuid;
     private String fullName;
-    private final HashMap<ContactType, String> contacts = new HashMap<>();
-    private final HashMap<SectionType, Section> sections = new HashMap<>();
+    private final Map<ContactType, String> contacts = new HashMap<>();
+    private final Map<SectionType, Section> sections = new HashMap<>();
 
     public Resume(String uuid) {
         this.uuid = uuid;
@@ -33,22 +34,24 @@ public class Resume implements Comparable<Resume> {
         this.fullName = fullName;
     }
 
+    public String getContact(ContactType contactType) {
+        return contacts.get(contactType);
+    }
+
     public void putContact(ContactType contactType, String contract) {
         contacts.put(contactType, contract);
     }
 
-    public HashMap<ContactType, String> getContacts() {
-        return new HashMap<>(contacts);
+    public void getSection(SectionType sectionType) {
+        sections.get(sectionType);
     }
 
-    public void putSection(SectionType sectionType, Section ... content) {
-        for (Section element:content) {
-            sections.put(sectionType, element);
-        }
+    public Map<SectionType, Section> getSections() {
+        return sections;
     }
 
-    public HashMap<SectionType, Section> getSections() {
-        return new HashMap<>(sections);
+    public void putSection(SectionType sectionType, Section section) {
+        sections.putIfAbsent(sectionType, section);
     }
 
     @Override

@@ -2,9 +2,6 @@ package com.basejava.webapp;
 
 import com.basejava.webapp.model.*;
 
-import java.util.Date;
-import java.util.HashMap;
-
 public class ResumeTestData {
     public static void main(String[] args) {
         Resume resume = new Resume("001", "Nikita Aliev");
@@ -15,26 +12,34 @@ public class ResumeTestData {
         ListSection qualificationList = new ListSection();
         qualificationList.addText("Arrays", "Collections", "jUnit 4", "Exceptions", "Reflection", "Generics", "logging", "Template method", "Singleton method");
         resume.putSection(SectionType.QUALIFICATIONS, qualificationList);
-        Organization vogu = new Organization("Vologda university","");
-        vogu.addPeriod(new OccupationPeriod("09/2017", "07.2021",
-                "Informatics and Computer Engineering",""));
-        resume.putSection(SectionType.EDUCATION, new OrganizationSection(vogu));
-        //OrganizationSection experienceUniversity = new OrganizationSection(vogu);
-        //experienceUniversity.addOrganization(new Organization());
-        //OrganizationSection experienceExternal = new OrganizationSection("JavaOps", "05/2012 - 07/2022", "BaseJava", "Create a resume repository project");
-        //resume.putSection(SectionType.EDUCATION, experienceUniversity, experienceExternal);
+        Organization vogu = new Organization("Vologda university", "");
+        vogu.addPeriod(new Period("09/2017", "07.2021",
+                "Informatics and Computer Engineering", ""));
+        Organization javaOps = new Organization("JavaOps", "https://javaops.ru/");
+        javaOps.addPeriod(new Period("05/2012", "07/2022",
+                "BaseJava", "Create a resume repository project"));
+        resume.putSection(SectionType.EDUCATION, new OrganizationSection(vogu, javaOps));
 
         printResume(resume);
     }
 
     public static void printResume(Resume resume) {
         System.out.println(resume.getFullName());
-        System.out.println("-----------------------------------------------------------------------");
-        HashMap<ContactType, String> contacts = resume.getContacts();
-        contacts.forEach((k, v) -> System.out.printf("%S: %S%n", k.getTitle(), v));
-        System.out.println("-----------------------------------------------------------------------");
-        HashMap<SectionType, Section> sections = resume.getSections();
-        sections.forEach((k, v) -> System.out.printf("%S%n%S%n%n", k.getTitle(), v.toString()));
-        System.out.println("-----------------------------------------------------------------------");
+        System.out.println("------Contacts------");
+        StringBuilder stringBuilder = new StringBuilder();
+        for (ContactType type : ContactType.values()) {
+            String contract = resume.getContact(type);
+            if (contract != null) {
+                stringBuilder.append(type.getTitle()).append(": ").append(contract).append("\n");
+            }
+        }
+        stringBuilder.setLength(stringBuilder.length() - 1);
+        System.out.println(stringBuilder);
+        stringBuilder.delete(0, stringBuilder.capacity());
+        resume.getSections().forEach((sectionType, section) -> {
+            stringBuilder.append("------").append(sectionType.getTitle()).append("------\n");
+            stringBuilder.append(section.toString()).append("\n");
+        });
+        System.out.println(stringBuilder);
     }
 }

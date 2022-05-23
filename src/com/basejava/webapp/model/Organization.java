@@ -6,14 +6,14 @@ import java.util.Arrays;
 public class Organization {
     private final String title;
     private String website;
-    private ArrayList<OccupationPeriod> periods = new ArrayList<>();
+    private ArrayList<Period> periods = new ArrayList<>();
 
     public Organization(String title, String website) {
         this.title = title;
         this.website = website;
     }
 
-    public Organization(String title, String website, ArrayList<OccupationPeriod> periods) {
+    public Organization(String title, String website, ArrayList<Period> periods) {
         this.title = title;
         this.website = website;
         this.periods = periods;
@@ -31,16 +31,16 @@ public class Organization {
         this.website = website;
     }
 
-    public void addPeriod(OccupationPeriod ... period) {
+    public void addPeriod(Period... period) {
         periods.addAll((Arrays.asList(period)));
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(title).append("\n");
-        for (OccupationPeriod period: periods) {
-            sb.append(period.toString());
+        for (Period period : periods) {
+            sb.append(period.toString()).append("\n");
         }
         return sb.toString();
     }

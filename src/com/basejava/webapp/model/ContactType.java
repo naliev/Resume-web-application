@@ -1,13 +1,13 @@
 package com.basejava.webapp.model;
 
 public enum ContactType {
-    TPHONE_NUMBER("Телефонный номер", "Телефон"),
+    PHONE_NUMBER("Телефонный номер", "Телефон"),
     SKYPE("Skype", "Телефон"),
-    EMAIL("Почта", "Строка"),
-    LINKEDIN("Профиль LinkedIn", "Ссылка"),
-    GITHUB("Профиль GitHub", "Ссылка"),
-    STACKOVERFLOW("Профиль StackOverFlow", "Ссылка"),
-    HOMEPAGE("Домашняя страница", "Ссылка");
+    EMAIL("Email", "Строка"),
+    LINKEDIN("LinkedIn", "Ссылка"),
+    GITHUB("GitHub", "Ссылка"),
+    STACKOVERFLOW("StackOverFlow", "Ссылка"),
+    HOMEPAGE("Homepage", "Ссылка");
 
     private final String title;
     private final String contentType;
