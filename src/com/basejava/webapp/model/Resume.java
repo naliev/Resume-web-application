@@ -38,20 +38,12 @@ public class Resume implements Comparable<Resume> {
         return contacts.get(contactType);
     }
 
-    public void putContact(ContactType contactType, String contract) {
-        contacts.put(contactType, contract);
-    }
-
     public void getSection(SectionType sectionType) {
         sections.get(sectionType);
     }
 
     public Map<SectionType, AbstractSection> getSections() {
         return sections;
-    }
-
-    public void putSection(SectionType sectionType, AbstractSection section) {
-        sections.putIfAbsent(sectionType, section);
     }
 
     @Override
@@ -62,9 +54,7 @@ public class Resume implements Comparable<Resume> {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Resume)) return false;
-
-        Resume resume = (Resume) o;
+        if (!(o instanceof Resume resume)) return false;
 
         return uuid.equals(resume.uuid);
     }

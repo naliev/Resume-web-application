@@ -1,7 +1,7 @@
 package com.basejava.webapp.model;
 
 public class TextSection extends AbstractSection {
-    private String text;
+    private final String text;
 
     public TextSection(String text) {
         this.text = text;
@@ -11,8 +11,17 @@ public class TextSection extends AbstractSection {
         return text;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TextSection that)) return false;
+
+        return text.equals(that.text);
+    }
+
+    @Override
+    public int hashCode() {
+        return text.hashCode();
     }
 
     @Override

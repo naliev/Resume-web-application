@@ -15,6 +15,19 @@ public class ListSection extends AbstractSection {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ListSection that)) return false;
+
+        return list.equals(that.list);
+    }
+
+    @Override
+    public int hashCode() {
+        return list.hashCode();
+    }
+
+    @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
         for (String text : list) {
