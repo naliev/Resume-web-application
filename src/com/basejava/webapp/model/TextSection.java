@@ -1,6 +1,6 @@
 package com.basejava.webapp.model;
 
-public class TextSection extends Section{
+public class TextSection extends AbstractSection {
     private String text;
 
     public TextSection(String text) {

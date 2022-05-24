@@ -3,7 +3,7 @@ package com.basejava.webapp.model;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class ListSection extends Section {
+public class ListSection extends AbstractSection {
     private final ArrayList<String> list = new ArrayList<>();
 
     public ArrayList<String> getList() {

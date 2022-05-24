@@ -3,7 +3,7 @@ package com.basejava.webapp.model;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class OrganizationSection extends Section {
+public class OrganizationSection extends AbstractSection {
     private final ArrayList<Organization> organizations;
 
     public OrganizationSection(Organization... organization) {
