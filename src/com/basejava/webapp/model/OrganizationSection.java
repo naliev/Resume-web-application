@@ -2,22 +2,26 @@ package com.basejava.webapp.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class OrganizationSection extends AbstractSection {
     private final ArrayList<Organization> organizations;
 
-    public OrganizationSection(Organization... organization) {
-        this.organizations = new ArrayList<>(Arrays.asList(organization));
+    public OrganizationSection(ArrayList<Organization> organizations) {
+        Objects.requireNonNull(organizations, "organizations must not be null");
+        this.organizations = organizations;
     }
 
     public ArrayList<Organization> getOrganizations() {
-        return new ArrayList<>(organizations);
+        return organizations;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof OrganizationSection that)) return false;
+        if (!(o instanceof OrganizationSection)) return false;
+
+        OrganizationSection that = (OrganizationSection) o;
 
         return organizations.equals(that.organizations);
     }

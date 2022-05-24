@@ -1,9 +1,12 @@
 package com.basejava.webapp.model;
 
+import java.util.Objects;
+
 public class TextSection extends AbstractSection {
     private final String text;
 
     public TextSection(String text) {
+        Objects.requireNonNull(text,"Text must be not null");
         this.text = text;
     }
 
@@ -14,7 +17,9 @@ public class TextSection extends AbstractSection {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TextSection that)) return false;
+        if (!(o instanceof TextSection)) return false;
+
+        TextSection that = (TextSection) o;
 
         return text.equals(that.text);
     }

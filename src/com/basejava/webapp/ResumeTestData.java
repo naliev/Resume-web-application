@@ -28,7 +28,7 @@ public class ResumeTestData {
         System.out.println("------Contacts------");
         StringBuilder stringBuilder = new StringBuilder();
         for (ContactType type : ContactType.values()) {
-            String contract = resume.getContact(type);
+            Object contract = resume.getContact(type);
             if (contract != null) {
                 stringBuilder.append(type.getTitle()).append(": ").append(contract).append("\n");
             }

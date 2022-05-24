@@ -1,7 +1,7 @@
 package com.basejava.webapp.model;
 
+import java.util.EnumMap;
 import java.util.Map;
-import java.util.HashMap;
 
 /**
  * Initial resume class
@@ -10,8 +10,8 @@ public class Resume implements Comparable<Resume> {
     // Unique identifier
     final private String uuid;
     private String fullName;
-    private final Map<ContactType, String> contacts = new HashMap<>();
-    private final Map<SectionType, AbstractSection> sections = new HashMap<>();
+    private final Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
+    private final Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
 
     public Resume(String uuid) {
         this.uuid = uuid;
@@ -34,7 +34,7 @@ public class Resume implements Comparable<Resume> {
         this.fullName = fullName;
     }
 
-    public String getContact(ContactType contactType) {
+    public Object getContact(ContactType contactType) {
         return contacts.get(contactType);
     }
 
@@ -48,20 +48,25 @@ public class Resume implements Comparable<Resume> {
 
     @Override
     public String toString() {
-        return uuid;
+        return uuid + " " + fullName;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Resume resume)) return false;
+        if (!(o instanceof Resume)) return false;
 
-        return uuid.equals(resume.uuid);
+        Resume resume = (Resume) o;
+
+        if (!uuid.equals(resume.uuid)) return false;
+        return fullName.equals(resume.fullName);
     }
 
     @Override
     public int hashCode() {
-        return uuid.hashCode();
+        int result = uuid.hashCode();
+        result = 31 * result + fullName.hashCode();
+        return result;
     }
 
     @Override
