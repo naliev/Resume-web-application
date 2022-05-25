@@ -25,7 +25,7 @@ public class ResumeTestData {
         }
         System.out.println(stringBuilder);
         stringBuilder.delete(0, stringBuilder.capacity());
-        for (SectionType type: SectionType.values()) {
+        for (SectionType type : SectionType.values()) {
             AbstractSection section = resume.getSection(type);
             if (section != null) {
                 stringBuilder.append("------").append(type.getTitle()).append("------\n");
