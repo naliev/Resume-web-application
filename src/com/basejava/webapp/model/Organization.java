@@ -1,22 +1,30 @@
 package com.basejava.webapp.model;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Organization {
     private final String title;
-    private final String website;
+    private final Link website;
     private final ArrayList<Period> periods = new ArrayList<>();
 
-    public Organization(String title, String website) {
+    public Organization(String title, Link website) {
+        Objects.requireNonNull(title);
         this.title = title;
         this.website = website;
+    }
+
+    public Organization(String title, String websiteName, String websiteUrl) {
+        Objects.requireNonNull(title);
+        this.title = title;
+        this.website = new Link(websiteName, websiteUrl);
     }
 
     public String getTitle() {
         return title;
     }
 
-    public String getWebsite() {
+    public Link getWebsite() {
         return website;
     }
 
@@ -24,12 +32,16 @@ public class Organization {
         return periods;
     }
 
+    public void addPeriod(Period period) {
+        periods.add(period);
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(title).append("\n");
         for (Period period : periods) {
-            sb.append(period.toString()).append("\n");
+            sb.append(period.toString());
         }
         return sb.toString();
     }

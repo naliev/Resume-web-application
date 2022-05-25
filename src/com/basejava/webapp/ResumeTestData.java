@@ -1,25 +1,15 @@
 package com.basejava.webapp;
 
 import com.basejava.webapp.model.*;
+import com.basejava.webapp.util.DateUtil;
+
+import java.time.Month;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ResumeTestData {
     public static void main(String[] args) {
-        Resume resume = new Resume("001", "Nikita Aliev");
-        //resume.putContact(ContactType.EMAIL, "dudadead@gmail.com");
-        //resume.putContact(ContactType.GITHUB, "Naliev");
-        //TextSection personal = new TextSection("Easy going, polite person");
-        //resume.putSection(SectionType.PERSONAL, personal);
-        //ListSection qualificationList = new ListSection();
-        //qualificationList.addText("Arrays", "Collections", "jUnit 4", "Exceptions", "Reflection", "Generics", "logging", "Template method", "Singleton method");
-        //resume.putSection(SectionType.QUALIFICATIONS, qualificationList);
-        //Organization vogu = new Organization("Vologda university", "");
-        //vogu.addPeriod(new Period("09/2017", "07.2021",
-        //        "Informatics and Computer Engineering", ""));
-        //Organization javaOps = new Organization("JavaOps", "https://javaops.ru/");
-        //javaOps.addPeriod(new Period("05/2012", "07/2022",
-        //        "BaseJava", "Create a resume repository project"));
-        //resume.putSection(SectionType.EDUCATION, new OrganizationSection(vogu, javaOps));
-
+        Resume resume = newResumeWithSections("001", "Nikita Aliev");
         printResume(resume);
     }
 
@@ -33,13 +23,37 @@ public class ResumeTestData {
                 stringBuilder.append(type.getTitle()).append(": ").append(contract).append("\n");
             }
         }
-        stringBuilder.setLength(stringBuilder.length() - 1);
         System.out.println(stringBuilder);
         stringBuilder.delete(0, stringBuilder.capacity());
-        resume.getSections().forEach((sectionType, section) -> {
-            stringBuilder.append("------").append(sectionType.getTitle()).append("------\n");
-            stringBuilder.append(section.toString()).append("\n");
-        });
+        for (SectionType type: SectionType.values()) {
+            AbstractSection section = resume.getSection(type);
+            if (section != null) {
+                stringBuilder.append("------").append(type.getTitle()).append("------\n");
+                stringBuilder.append(section).append("\n");
+            }
+        }
         System.out.println(stringBuilder);
+    }
+
+    public static Resume newResumeWithSections(String uuid, String fullName) {
+        Resume resume = new Resume(uuid, fullName);
+        resume.addContact(ContactType.EMAIL, "dudadead@gmail.com");
+        resume.addContact(ContactType.GITHUB, "Naliev");
+        resume.addSection(SectionType.PERSONAL, new TextSection("Easy-going, polite person"));
+        String[] qualificationList = {"Arrays", "Collections", "jUnit 4", "Exceptions", "Reflection", "Generics",
+                "logging", "Template method", "Singleton method"};
+        resume.addSection(SectionType.QUALIFICATIONS, new ListSection(new ArrayList<>(Arrays.asList(qualificationList))));
+
+        Organization vogu = new Organization("Vologda university", "vogu35", "vogu35.ru");
+        vogu.addPeriod(new Period(DateUtil.of(2017, Month.JULY), DateUtil.of(2017, Month.SEPTEMBER),
+                "Preliminary Courses", ""));
+        vogu.addPeriod(new Period(DateUtil.of(2017, Month.SEPTEMBER), DateUtil.of(2021, Month.JUNE),
+                "Informatics and Computer Engineering", ""));
+        Organization javaOps = new Organization("JavaOps", "JavaOps", "https://javaops.ru/");
+        javaOps.addPeriod(new Period(DateUtil.of(2022, Month.MAY), DateUtil.of(2022, Month.JULY),
+                "BaseJava", "Create a resume repository project"));
+        resume.addSection(SectionType.EDUCATION, new OrganizationSection(new ArrayList<>(Arrays.asList(vogu, javaOps))));
+
+        return resume;
     }
 }

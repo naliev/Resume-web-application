@@ -35,9 +35,8 @@ public class OrganizationSection extends AbstractSection {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (Organization org : organizations) {
-            sb.append(String.format("%S", org.toString()));
+            sb.append(org.toString());
         }
-        sb.setLength(sb.length() - 1);
         return sb.toString();
     }
 }

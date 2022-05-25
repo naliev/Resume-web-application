@@ -34,18 +34,21 @@ public class Resume implements Comparable<Resume> {
         this.fullName = fullName;
     }
 
-    public Object getContact(ContactType contactType) {
+    public String getContact(ContactType contactType) {
         return contacts.get(contactType);
     }
 
-    public void getSection(SectionType sectionType) {
-        sections.get(sectionType);
+    public AbstractSection getSection(SectionType sectionType) {
+        return sections.get(sectionType);
     }
 
-    public Map<SectionType, AbstractSection> getSections() {
-        return sections;
+    public void addContact(ContactType type, String value) {
+        contacts.put(type, value);
     }
 
+    public void addSection(SectionType type, AbstractSection section) {
+        sections.put(type, section);
+    }
     @Override
     public String toString() {
         return uuid + " " + fullName;

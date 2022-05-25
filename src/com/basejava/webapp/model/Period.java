@@ -1,6 +1,7 @@
 package com.basejava.webapp.model;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Period {
     private final LocalDate from;
@@ -34,7 +35,10 @@ public class Period {
     @Override
     public String toString() {
         if (description != null) {
-            return String.format("%S-%S %S%n%S", from, to, position, description);
+            return String.format("%S-%S %S%n%S",
+                    from.format(DateTimeFormatter.ofPattern("MM.yy")),
+                    to.format(DateTimeFormatter.ofPattern("MM.yy")),
+                    position, description);
         } else {
             return String.format("%S-%S %S", from, to, position);
         }
