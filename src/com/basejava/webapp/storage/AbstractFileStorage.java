@@ -5,6 +5,7 @@ import com.basejava.webapp.model.Resume;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,7 +29,12 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected List<Resume> doGetAll() {
-        return null;
+        File[] files = getFilesFromDirectory(directory);
+        List<Resume> list = new ArrayList<>(files.length);
+        for (File file : files) {
+            list.add(doGet(file));
+        }
+        return list;
     }
 
     @Override
@@ -36,7 +42,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         try {
             return doRead(file);
         } catch (IOException e) {
-            throw new StorageException(file.getAbsolutePath() + "is cannot be read", "unknown");
+            throw new StorageException(file.getAbsolutePath() + "is cannot be read", file.getName());
         }
     }
 
