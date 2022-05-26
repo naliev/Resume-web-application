@@ -50,7 +50,7 @@ public class ResumeTestData {
         vogu.addPeriod(new Period(DateUtil.of(2017, Month.SEPTEMBER), DateUtil.of(2021, Month.JUNE),
                 "Informatics and Computer Engineering", ""));
         Organization javaOps = new Organization("JavaOps", "JavaOps", "https://javaops.ru/");
-        javaOps.addPeriod(new Period(DateUtil.of(2022, Month.MAY), DateUtil.of(2022, Month.JULY),
+        javaOps.addPeriod(new Period(DateUtil.of(2022, Month.MAY), DateUtil.NOW,
                 "BaseJava", "Create a resume repository project"));
         resume.addSection(SectionType.EDUCATION, new OrganizationSection(new ArrayList<>(Arrays.asList(vogu, javaOps))));
 
