@@ -1,5 +1,6 @@
 package com.basejava.webapp.storage;
 
+import com.basejava.webapp.exception.StorageException;
 import com.basejava.webapp.model.Resume;
 
 import java.io.File;
@@ -35,7 +36,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         try {
             return doRead(file);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new StorageException(file.getAbsolutePath() + "is cannot be read", "unknown");
         }
     }
 
@@ -44,7 +45,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         try {
             doWrite(r, file);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new StorageException(file.getAbsolutePath() + "is cannot be updated", r.getUuid());
         }
     }
 
@@ -54,14 +55,14 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
             file.createNewFile();
             doWrite(r, file);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new StorageException(file.getAbsolutePath() + "is cannot be saved", r.getUuid());
         }
     }
 
     @Override
     protected void doDelete(File file) {
         if (!file.delete()) {
-            throw new RuntimeException(file.getAbsolutePath() + "is cannot be deleted");
+            throw new StorageException(file.getAbsolutePath() + "is cannot be deleted", doGet(file).getUuid());
         }
     }
 
@@ -77,13 +78,22 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     public int size() {
-        return directory.listFiles().length;
+        return notNullDirectory(directory).length;
     }
 
     @Override
     public void clear() {
-        for (File file : directory.listFiles()) {
+        for (File file : notNullDirectory(directory)) {
             doDelete(file);
+        }
+    }
+
+    private File[] notNullDirectory(File directory) {
+        File[] files = directory.listFiles();
+        if (files == null) {
+            throw new StorageException(directory.getAbsolutePath() + "is not appropriate directory", "unknown");
+        } else {
+            return files;
         }
     }
 }
