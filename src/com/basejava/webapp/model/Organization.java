@@ -1,9 +1,11 @@
 package com.basejava.webapp.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class Organization {
+public class Organization implements Serializable {
+    private static final long SerialVersionUID = 1L;
     private final String title;
     private final Link website;
     private final ArrayList<Period> periods = new ArrayList<>();

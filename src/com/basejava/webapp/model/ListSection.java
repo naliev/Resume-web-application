@@ -1,9 +1,11 @@
 package com.basejava.webapp.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class ListSection extends AbstractSection {
+public class ListSection extends AbstractSection implements Serializable {
+    private static final long SerialVersionUID = 1L;
     private final ArrayList<String> list;
 
     public ListSection(ArrayList<String> list) {

@@ -1,12 +1,14 @@
 package com.basejava.webapp.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class TextSection extends AbstractSection {
+public class TextSection extends AbstractSection implements Serializable {
+    private static final long SerialVersionUID = 1L;
     private final String text;
 
     public TextSection(String text) {
-        Objects.requireNonNull(text,"Text must be not null");
+        Objects.requireNonNull(text, "Text must be not null");
         this.text = text;
     }
 
@@ -30,7 +32,7 @@ public class TextSection extends AbstractSection {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return text;
     }
 }

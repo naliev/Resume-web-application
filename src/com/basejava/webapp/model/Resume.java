@@ -1,12 +1,14 @@
 package com.basejava.webapp.model;
 
+import java.io.Serializable;
 import java.util.EnumMap;
 import java.util.Map;
 
 /**
  * Initial resume class
  */
-public class Resume implements Comparable<Resume> {
+public class Resume implements Comparable<Resume>, Serializable {
+    private static final long SerialVersionUID = 1L;
     // Unique identifier
     final private String uuid;
     private String fullName;
@@ -49,6 +51,7 @@ public class Resume implements Comparable<Resume> {
     public void addSection(SectionType type, AbstractSection section) {
         sections.put(type, section);
     }
+
     @Override
     public String toString() {
         return uuid + " " + fullName;
