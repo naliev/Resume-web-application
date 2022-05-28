@@ -32,6 +32,7 @@ public abstract class AbstractStorageTest {
 
     @Before
     public void setUp() {
+        storage.clear();
         storage.save(RESUME_1);
         storage.save(RESUME_2);
         storage.save(RESUME_3);
@@ -71,7 +72,7 @@ public abstract class AbstractStorageTest {
     @Test
     public void update() throws NotExistStorageException {
         storage.update(RESUME_1);
-        Assertions.assertTrue((storage.get(RESUME_1.getUuid()) == RESUME_1));
+        Assertions.assertEquals(storage.get(RESUME_1.getUuid()), RESUME_1);
     }
 
     @Test
