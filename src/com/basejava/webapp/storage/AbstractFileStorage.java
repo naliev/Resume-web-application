@@ -3,8 +3,8 @@ package com.basejava.webapp.storage;
 import com.basejava.webapp.exception.StorageException;
 import com.basejava.webapp.model.Resume;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -23,13 +23,13 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         this.directory = directory;
     }
 
-    protected abstract void doWrite(Resume r, File file) throws IOException;
+    protected abstract void doWrite(Resume r, OutputStream os) throws IOException;
 
-    protected abstract Resume doRead(File file) throws IOException;
+    protected abstract Resume doRead(InputStream is) throws IOException;
 
     @Override
     protected List<Resume> doGetAll() {
-        File[] files = getFilesFromDirectory(directory);
+        File[] files = getFiles(directory);
         List<Resume> list = new ArrayList<>(files.length);
         for (File file : files) {
             list.add(doGet(file));
@@ -40,7 +40,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     protected Resume doGet(File file) {
         try {
-            return doRead(file);
+            return doRead(new BufferedInputStream(Files.newInputStream(file.toPath())));
         } catch (IOException e) {
             throw new StorageException(file.getAbsolutePath() + "is cannot be read", file.getName());
         }
@@ -49,9 +49,9 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     protected void doUpdate(Resume r, File file) {
         try {
-            doWrite(r, file);
+            doWrite(r, new BufferedOutputStream(Files.newOutputStream(file.toPath())));
         } catch (IOException e) {
-            throw new StorageException(file.getAbsolutePath() + "is cannot be updated", r.getUuid());
+            throw new StorageException(file.getAbsolutePath() + " is cannot be updated", r.getUuid(), e);
         }
     }
 
@@ -59,16 +59,16 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     protected void doSave(Resume r, File file) {
         try {
             file.createNewFile();
-            doWrite(r, file);
         } catch (IOException e) {
-            throw new StorageException(file.getAbsolutePath() + "is cannot be saved", r.getUuid());
+            throw new StorageException(file.getAbsolutePath() + " is cannot be saved", r.getUuid(), e);
         }
+        doUpdate(r, file);
     }
 
     @Override
     protected void doDelete(File file) {
         if (!file.delete()) {
-            throw new StorageException(file.getAbsolutePath() + "is cannot be deleted", doGet(file).getUuid());
+            throw new StorageException(file.getAbsolutePath() + " is cannot be deleted", file.getName());
         }
     }
 
@@ -84,21 +84,21 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     public int size() {
-        return getFilesFromDirectory(directory).length;
+        return getFiles(directory).length;
     }
 
     @Override
     public void clear() {
-        File[] files = getFilesFromDirectory(directory);
+        File[] files = getFiles(directory);
         for (File file : files) {
             doDelete(file);
         }
     }
 
-    private File[] getFilesFromDirectory(File directory) {
+    private File[] getFiles(File directory) {
         File[] files = directory.listFiles();
         if (files == null) {
-            throw new StorageException(directory.getAbsolutePath() + "is not appropriate directory", "unknown");
+            throw new StorageException(directory.getAbsolutePath() + " pathname does not denote a directory, or an I/O error occurs", null);
         } else {
             return files;
         }
