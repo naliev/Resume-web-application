@@ -2,6 +2,7 @@ package com.basejava.webapp.storage;
 
 import com.basejava.webapp.exception.StorageException;
 import com.basejava.webapp.model.Resume;
+import com.basejava.webapp.strategies.IOStrategy;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -9,10 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class AbstractFileStorage extends AbstractStorage<File> {
+public class FileStorage extends AbstractStorage<File> {
     private final File directory;
+    private final IOStrategy strategy;
 
-    protected AbstractFileStorage(File directory) {
+    FileStorage(File directory, IOStrategy strategy) {
         Objects.requireNonNull(directory);
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException((directory.getAbsolutePath() + "is not a directory"));
@@ -21,11 +23,8 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
             throw new IllegalArgumentException(directory.getAbsolutePath() + "is not readable/writeable");
         }
         this.directory = directory;
+        this.strategy = strategy;
     }
-
-    protected abstract void doWrite(Resume r, OutputStream os) throws IOException;
-
-    protected abstract Resume doRead(InputStream is) throws IOException;
 
     @Override
     protected List<Resume> doGetAll() {
@@ -40,7 +39,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     protected Resume doGet(File file) {
         try {
-            return doRead(new BufferedInputStream(Files.newInputStream(file.toPath())));
+            return strategy.doRead(new BufferedInputStream(Files.newInputStream(file.toPath())));
         } catch (IOException e) {
             throw new StorageException(file.getAbsolutePath() + "is cannot be read", file.getName());
         }
@@ -49,7 +48,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     protected void doUpdate(Resume r, File file) {
         try {
-            doWrite(r, new BufferedOutputStream(Files.newOutputStream(file.toPath())));
+            strategy.doWrite(r, new BufferedOutputStream(Files.newOutputStream(file.toPath())));
         } catch (IOException e) {
             throw new StorageException(file.getAbsolutePath() + " is cannot be updated", r.getUuid(), e);
         }

@@ -1,17 +1,14 @@
-package com.basejava.webapp.storage;
+package com.basejava.webapp.strategies;
 
 import com.basejava.webapp.exception.StorageException;
 import com.basejava.webapp.model.Resume;
 
 import java.io.*;
 
-public class ObjectStreamPathStorage extends AbstractPathStorage {
-    protected ObjectStreamPathStorage(String directory) {
-        super(directory);
-    }
+public class ObjectStreamStorage implements IOStrategy {
 
     @Override
-    protected void doWrite(Resume r, OutputStream stream) {
+    public void doWrite(Resume r, OutputStream stream) {
         try (ObjectOutputStream oos = new ObjectOutputStream(stream)) {
             oos.writeObject(r);
         } catch (IOException e) {
@@ -20,8 +17,8 @@ public class ObjectStreamPathStorage extends AbstractPathStorage {
     }
 
     @Override
-    protected Resume doRead(InputStream path) {
-        try (ObjectInputStream ois = new ObjectInputStream(path)) {
+    public Resume doRead(InputStream stream) {
+        try (ObjectInputStream ois = new ObjectInputStream(stream)) {
             return (Resume) ois.readObject();
         } catch (ClassNotFoundException | IOException e) {
             throw new StorageException("Error read resume", null, e);

@@ -2,6 +2,7 @@ package com.basejava.webapp.storage;
 
 import com.basejava.webapp.exception.StorageException;
 import com.basejava.webapp.model.Resume;
+import com.basejava.webapp.strategies.IOStrategy;
 
 import java.io.*;
 import java.nio.file.*;
@@ -10,20 +11,18 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-public abstract class AbstractPathStorage extends AbstractStorage<Path> {
+public class PathStorage extends AbstractStorage<Path> {
     private final Path directory;
+    private final IOStrategy strategy;
 
-    protected AbstractPathStorage(String dir) {
+    protected PathStorage(String dir, IOStrategy strategy) {
         Objects.requireNonNull(dir, "directory mustn't be null");
         directory = Paths.get(dir);
         if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {
             throw new StorageException(dir + " is not directory or is not writable", null);
         }
+        this.strategy = strategy;
     }
-
-    protected abstract void doWrite(Resume r, OutputStream stream);
-
-    protected abstract Resume doRead(InputStream stream);
 
     @Override
     protected List<Resume> doGetAll() {
@@ -40,7 +39,7 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
     @Override
     protected Resume doGet(Path path) {
         try {
-            return doRead(new BufferedInputStream(Files.newInputStream(path)));
+            return strategy.doRead(new BufferedInputStream(Files.newInputStream(path)));
         } catch (IOException e) {
             throw new StorageException(path + "is cannot be read", getFileName(path), e);
         }
@@ -49,7 +48,7 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
     @Override
     protected void doUpdate(Resume r, Path path) {
         try {
-            doWrite(r, new BufferedOutputStream(Files.newOutputStream(path)));
+            strategy.doWrite(r, new BufferedOutputStream(Files.newOutputStream(path)));
         } catch (IOException e) {
             throw new StorageException(path + " is cannot be updated", r.getUuid(), e);
         }
