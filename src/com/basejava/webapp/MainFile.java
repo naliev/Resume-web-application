@@ -1,5 +1,6 @@
 package com.basejava.webapp;
 
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -32,9 +33,7 @@ public class MainFile {
             throw new RuntimeException(e);
         }
 
-        for (File nestedFile : getDeepDirList(dir)) {
-            System.out.println(nestedFile);
-        }
+        showDeepDirList(dir, "");
     }
 
     public static ArrayList<File> getDeepDirList(File directory) {
@@ -48,6 +47,17 @@ public class MainFile {
             }
         }
         return files;
+    }
+
+    public static void showDeepDirList(File directory, String level) {
+        for (File file : Objects.requireNonNull(directory.listFiles())) {
+            if (file.isDirectory()) {
+                System.out.println( level + "|---"+file.getName());
+                showDeepDirList(file, (level + "|   "));
+            } else {
+                System.out.println( level +"|---"+ file.getName());
+            }
+        }
     }
 
 }
