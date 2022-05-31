@@ -41,7 +41,7 @@ public class FileStorage extends AbstractStorage<File> {
         try {
             return strategy.doRead(new BufferedInputStream(Files.newInputStream(file.toPath())));
         } catch (IOException e) {
-            throw new StorageException(file.getAbsolutePath() + "is cannot be read", file.getName());
+            throw new StorageException(file.getAbsolutePath() + "is cannot be read", file.getName(), e);
         }
     }
 
@@ -97,9 +97,8 @@ public class FileStorage extends AbstractStorage<File> {
     private File[] getFiles(File directory) {
         File[] files = directory.listFiles();
         if (files == null) {
-            throw new StorageException(directory.getAbsolutePath() + " pathname does not denote a directory, or an I/O error occurs", null);
-        } else {
-            return files;
+            throw new StorageException(directory.getAbsolutePath() + " pathname does not denote a directory, or an I/O error occurs");
         }
+        return files;
     }
 }

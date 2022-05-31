@@ -19,7 +19,7 @@ public class PathStorage extends AbstractStorage<Path> {
         Objects.requireNonNull(dir, "directory mustn't be null");
         directory = Paths.get(dir);
         if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {
-            throw new StorageException(dir + " is not directory or is not writable", null);
+            throw new StorageException(dir + " is not directory or is not writable");
         }
         this.strategy = strategy;
     }
@@ -92,7 +92,7 @@ public class PathStorage extends AbstractStorage<Path> {
         try {
             return Files.list(directory);
         } catch (IOException e) {
-            throw new StorageException(directory + " pathname does not denote a directory, or an I/O error occurs", null, e);
+            throw new StorageException(directory + " pathname does not denote a directory, or an I/O error occurs", e);
         }
     }
 
