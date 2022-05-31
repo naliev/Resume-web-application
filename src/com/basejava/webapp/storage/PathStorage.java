@@ -2,7 +2,7 @@ package com.basejava.webapp.storage;
 
 import com.basejava.webapp.exception.StorageException;
 import com.basejava.webapp.model.Resume;
-import com.basejava.webapp.strategies.IOStrategy;
+import com.basejava.webapp.storage.strategy.IOStrategy;
 
 import java.io.*;
 import java.nio.file.*;

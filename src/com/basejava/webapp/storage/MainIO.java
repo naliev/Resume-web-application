@@ -3,7 +3,7 @@ package com.basejava.webapp.storage;
 
 import com.basejava.webapp.ResumeTestData;
 import com.basejava.webapp.model.Resume;
-import com.basejava.webapp.strategies.ObjectStreamStorage;
+import com.basejava.webapp.storage.strategy.ObjectStreamStorage;
 
 import java.io.File;
 

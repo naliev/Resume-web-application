@@ -1,6 +1,6 @@
 package com.basejava.webapp.storage;
 
-import com.basejava.webapp.strategies.ObjectStreamStorage;
+import com.basejava.webapp.storage.strategy.ObjectStreamStorage;
 
 public class ObjectStreamPathStorageTest extends AbstractStorageTest {
     public ObjectStreamPathStorageTest() {
