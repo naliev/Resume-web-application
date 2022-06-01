@@ -2,12 +2,14 @@ package com.basejava.webapp.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Objects;
 
 public class OrganizationSection extends AbstractSection implements Serializable {
     private static final long SerialVersionUID = 1L;
-    private final ArrayList<Organization> organizations;
+    private ArrayList<Organization> organizations;
+
+    public OrganizationSection() {
+    }
 
     public OrganizationSection(ArrayList<Organization> organizations) {
         Objects.requireNonNull(organizations, "organizations must not be null");

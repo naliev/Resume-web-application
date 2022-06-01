@@ -12,7 +12,7 @@ public class ObjectStreamStorage implements IOStrategy {
         try (ObjectOutputStream oos = new ObjectOutputStream(stream)) {
             oos.writeObject(r);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new StorageException("Error write resume", e);
         }
     }
 
@@ -21,7 +21,7 @@ public class ObjectStreamStorage implements IOStrategy {
         try (ObjectInputStream ois = new ObjectInputStream(stream)) {
             return (Resume) ois.readObject();
         } catch (ClassNotFoundException | IOException e) {
-            throw new StorageException("Error read resume", null, e);
+            throw new StorageException("Error read resume", e);
         }
     }
 }

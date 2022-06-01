@@ -1,14 +1,20 @@
 package com.basejava.webapp.model;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Organization implements Serializable {
     private static final long SerialVersionUID = 1L;
-    private final String title;
-    private final Link website;
+    private String title;
+    private Link website;
     private final ArrayList<Period> periods = new ArrayList<>();
+
+    public Organization() {
+    }
 
     public Organization(String title, Link website) {
         Objects.requireNonNull(title);
@@ -36,6 +42,19 @@ public class Organization implements Serializable {
 
     public void addPeriod(Period period) {
         periods.add(period);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Organization)) return false;
+        Organization that = (Organization) o;
+        return title.equals(that.title) && website.equals(that.website) && periods.equals(that.periods);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, website, periods);
     }
 
     @Override

@@ -6,7 +6,10 @@ import java.util.Objects;
 
 public class ListSection extends AbstractSection implements Serializable {
     private static final long SerialVersionUID = 1L;
-    private final ArrayList<String> list;
+    private ArrayList<String> list;
+
+    public ListSection() {
+    }
 
     public ListSection(ArrayList<String> list) {
         Objects.requireNonNull(list, "list must not be null");
