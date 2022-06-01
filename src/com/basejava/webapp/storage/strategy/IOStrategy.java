@@ -9,5 +9,5 @@ import java.io.OutputStream;
 public interface IOStrategy {
     void doWrite(Resume r, OutputStream os) throws IOException;
 
-    Resume doRead(InputStream is);
+    Resume doRead(InputStream is) throws IOException;
 }

@@ -1,6 +1,5 @@
 package com.basejava.webapp.storage.strategy;
 
-import com.basejava.webapp.exception.StorageException;
 import com.basejava.webapp.model.*;
 import com.basejava.webapp.util.XmlParser;
 
@@ -17,20 +16,16 @@ public class XmlStreamSerializer implements IOStrategy {
     }
 
     @Override
-    public void doWrite(Resume r, OutputStream os) {
+    public void doWrite(Resume r, OutputStream os) throws IOException {
         try (Writer w = new OutputStreamWriter(os, StandardCharsets.UTF_8)) {
             xmlParser.marshall(r, w);
-        } catch (IOException e) {
-            throw new StorageException("Error write resume", e);
         }
     }
 
     @Override
-    public Resume doRead(InputStream is) {
+    public Resume doRead(InputStream is) throws IOException {
         try (Reader r = new InputStreamReader(is, StandardCharsets.UTF_8)) {
             return xmlParser.unmarshall(r);
-        } catch (IOException e) {
-            throw new StorageException("Error read resume", e);
         }
     }
 }
