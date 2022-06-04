@@ -5,7 +5,7 @@ import com.basejava.webapp.model.Resume;
 
 import java.io.*;
 
-public class ObjectStreamStorage implements IOStrategy {
+public class ObjectStreamSerializer implements IOStrategy {
 
     @Override
     public void doWrite(Resume r, OutputStream stream) {
