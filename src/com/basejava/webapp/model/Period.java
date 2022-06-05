@@ -52,8 +52,7 @@ public class Period implements Serializable {
         if (!(o instanceof Period)) return false;
         Period period = (Period) o;
         return from.equals(period.from) && to.equals(period.to)
-                && position.equals(period.position)
-                && description.equals(period.description);
+                && position.equals(period.position);
     }
 
     @Override
