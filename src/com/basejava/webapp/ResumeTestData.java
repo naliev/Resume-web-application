@@ -44,9 +44,9 @@ public class ResumeTestData {
                 "logging", "Template method", "Singleton method"};
         resume.addSection(SectionType.QUALIFICATIONS, new ListSection(new ArrayList<>(Arrays.asList(qualificationList))));
 
-        Organization vogu = new Organization("Vologda university", "vogu35", "vogu35.ru");
+        Organization vogu = new Organization("Vologda university", "vogu35", null);
         vogu.addPeriod(new Period(DateUtil.of(2017, Month.JULY), DateUtil.of(2017, Month.SEPTEMBER),
-                "Preliminary Courses", ""));
+                "Preliminary Courses", null));
         vogu.addPeriod(new Period(DateUtil.of(2017, Month.SEPTEMBER), DateUtil.of(2021, Month.JUNE),
                 "Informatics and Computer Engineering", ""));
         Organization javaOps = new Organization("JavaOps", "JavaOps", "https://javaops.ru/");

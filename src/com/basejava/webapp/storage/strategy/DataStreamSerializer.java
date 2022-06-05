@@ -36,12 +36,12 @@ public class DataStreamSerializer implements IOStrategy {
                         writeList(dos, ((OrganizationSection) section).getOrganizations(), entry1 -> {
                             dos.writeUTF(entry1.getTitle());
                             dos.writeUTF(entry1.getWebsite().getName());
-                            dos.writeUTF(entry1.getWebsite().getUrl());
+                            dos.writeUTF((entry1.getWebsite().getUrl() == null)?"null":entry1.getWebsite().getUrl());
                             writeList(dos, entry1.getPeriods(), entry2 -> {
                                 writeLocalDate(dos, entry2.getFrom());
                                 writeLocalDate(dos, entry2.getTo());
                                 dos.writeUTF(entry2.getPosition());
-                                dos.writeUTF(entry2.getDescription());
+                                dos.writeUTF((entry2.getDescription() == null)?"null":entry2.getDescription());
                             });
                         });
                         break;
@@ -74,14 +74,17 @@ public class DataStreamSerializer implements IOStrategy {
                     case EDUCATION:
                         r.addSection(sectionType, new OrganizationSection((ArrayList<Organization>)
                                 readList(dis, () -> {
-                                    Organization org = new Organization(dis.readUTF(), dis.readUTF(), dis.readUTF());
+                                    Organization org = new Organization(dis.readUTF(),
+                                            dis.readUTF(),
+                                            readNullAbleString(dis.readUTF())
+                                    );
                                     ArrayList<Period> periods = (ArrayList<Period>)
                                         readList(dis, () ->
                                             new Period(
                                                 readLocalDate(dis),
                                                 readLocalDate(dis),
                                                 dis.readUTF(),
-                                                dis.readUTF()
+                                                readNullAbleString(dis.readUTF())
                                             )
                                         );
                                     periods.forEach(org::addPeriod);
@@ -129,4 +132,13 @@ public class DataStreamSerializer implements IOStrategy {
     private LocalDate readLocalDate(DataInputStream dis) throws IOException {
         return LocalDate.of(dis.readInt(), dis.readInt(), 1);
     }
+
+    private String readNullAbleString(String s) {
+        if (s.equals("null")) {
+            return null;
+        } else {
+            return s;
+        }
+    }
+
 }
