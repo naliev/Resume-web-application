@@ -9,14 +9,14 @@ public class MainDeadLock {
 
     static class Storage {
 
-        public Thread createAndRun(String firstResource, String SecondResource) {
+        public Thread createAndRun(String firstResource, String secondResource) {
             Thread th = new Thread(() -> {
                 try {
                     synchronized (firstResource) {
                         System.out.println(Thread.currentThread().getName() + " blocked a " + firstResource);
                         Thread.sleep(10);
-                        synchronized (SecondResource) {
-                            System.out.println(Thread.currentThread().getName() + " blocked a " + SecondResource);
+                        synchronized (secondResource) {
+                            System.out.println(Thread.currentThread().getName() + " blocked a " + secondResource);
                         }
                     }
                 } catch (InterruptedException e) {
