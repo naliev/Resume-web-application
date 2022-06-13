@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 public class ResumeTestData {
     public static void main(String[] args) {
-        Resume resume = newResumeWithSections("001", "Nikita Aliev");
+        Resume resume = newResumeWithSectionsNaliev("001", "Nikita Aliev");
         printResume(resume);
     }
 
@@ -35,7 +35,7 @@ public class ResumeTestData {
         System.out.println(stringBuilder);
     }
 
-    public static Resume newResumeWithSections(String uuid, String fullName) {
+    public static Resume newResumeWithSectionsNaliev(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
         resume.addContact(ContactType.EMAIL, "dudadead@gmail.com");
         resume.addContact(ContactType.GITHUB, "Naliev");
@@ -48,10 +48,46 @@ public class ResumeTestData {
         vogu.addPeriod(new Period(DateUtil.of(2017, Month.JULY), DateUtil.of(2017, Month.SEPTEMBER),
                 "Preliminary Courses", null));
         vogu.addPeriod(new Period(DateUtil.of(2017, Month.SEPTEMBER), DateUtil.of(2021, Month.JUNE),
-                "Informatics and Computer Engineering", ""));
+                "Undergraduate","Informatics and Computer Engineering"));
         Organization javaOps = new Organization("JavaOps", "JavaOps", "https://javaops.ru/");
         javaOps.addPeriod(new Period(DateUtil.of(2022, Month.MAY), DateUtil.NOW,
                 "BaseJava", "Create a resume repository project"));
+        resume.addSection(SectionType.EDUCATION, new OrganizationSection(new ArrayList<>(Arrays.asList(vogu, javaOps))));
+
+        return resume;
+    }
+
+    public static Resume newResumeWithSectionsPavlov(String uuid, String fullName) {
+        Resume resume = new Resume(uuid, fullName);
+        resume.addContact(ContactType.EMAIL, "Pavlov@yandex.ru");
+        resume.addContact(ContactType.GITHUB, "Pavlov");
+        resume.addSection(SectionType.PERSONAL, new TextSection("Confident, ambitious man"));
+        String[] qualificationList = {"Java core", "Unit testing", "Spring", "Hibernate"};
+        resume.addSection(SectionType.QUALIFICATIONS, new ListSection(new ArrayList<>(Arrays.asList(qualificationList))));
+
+        Organization mgu = new Organization("Moscow government university", "mgu website", "msu.ru");
+        mgu.addPeriod(new Period(DateUtil.of(2011, Month.SEPTEMBER), DateUtil.of(2015, Month.MAY),
+                "Undergraduate", "Creation and automation of computing systems"));
+        mgu.addPeriod(new Period(DateUtil.of(2015, Month.SEPTEMBER), DateUtil.of(2021, Month.JUNE),
+                "Graduate school", "Creation and automation of computing systems"));
+
+        return resume;
+    }
+
+    public static Resume newResumeWithSectionsAvdeeva(String uuid, String fullName) {
+        Resume resume = new Resume(uuid, fullName);
+        resume.addContact(ContactType.EMAIL, "AvdeevaIrina@mail.ru");
+        resume.addContact(ContactType.GITHUB, "AvIr");
+        resume.addSection(SectionType.PERSONAL, new TextSection("Cheerful and big hearted"));
+        String[] qualificationList = {"Python core", "Django", "Laravel", "Kafka"};
+        resume.addSection(SectionType.QUALIFICATIONS, new ListSection(new ArrayList<>(Arrays.asList(qualificationList))));
+
+        Organization vogu = new Organization("Saints petersburg university", "spu", null);
+        vogu.addPeriod(new Period(DateUtil.of(2015, Month.SEPTEMBER), DateUtil.of(2020, Month.JUNE),
+                "Undergraduate","Informatics and Computer Engineering"));
+        Organization javaOps = new Organization("JavaOps", "JavaOps", "https://javaops.ru/");
+        javaOps.addPeriod(new Period(DateUtil.of(2018, Month.MAY), DateUtil.of(2018, Month.AUGUST),
+                "TopJava", "Create a resume repository project"));
         resume.addSection(SectionType.EDUCATION, new OrganizationSection(new ArrayList<>(Arrays.asList(vogu, javaOps))));
 
         return resume;
