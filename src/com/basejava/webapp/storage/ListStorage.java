@@ -4,6 +4,7 @@ import com.basejava.webapp.model.Resume;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.stream.Stream;
 
 public class ListStorage extends AbstractStorage<Integer> {
     protected final List<Resume> storage = new ArrayList<>();
@@ -56,5 +57,9 @@ public class ListStorage extends AbstractStorage<Integer> {
     @Override
     protected boolean isExist(Integer searchKey) {
         return (searchKey != null);
+    }
+
+    public Stream<Resume> stream() {
+        return new ArrayList<>(storage).stream();
     }
 }
