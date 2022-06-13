@@ -3,9 +3,7 @@ package com.basejava.webapp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.OptionalInt;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.IntBinaryOperator;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class MainStream {
@@ -18,35 +16,18 @@ public class MainStream {
     public static int minValue(int[] values) {
         System.out.println(Arrays.toString(values));
 
-        AtomicInteger i = new AtomicInteger(10);
-        IntBinaryOperator multiplier = (a, b) -> {
-            a = a + b * i.get();
-            i.updateAndGet(v -> v * 10);
-            return a;
-        };
-
-        OptionalInt result = Arrays.stream(values).
+        return Arrays.stream(values).
                 distinct().
-                map(value -> -value).
                 sorted().
-                map(value -> -value).
-                reduce(multiplier);
-
-        if (result.isPresent()) {
-            return result.getAsInt();
-        } else {
-            return 0;
-        }
+                reduce(0, (a, b) -> a * 10 + b);
     }
 
     public static List<Integer> oddOrEven(List<Integer> integers) {
         System.out.println(integers);
 
-        boolean odd = (integers.stream().mapToInt(Integer::intValue).sum() % 2 == 0);
-
-        return integers.stream().
-                filter(value -> value % 2 == 0 != odd).
-                collect(Collectors.toList());
+        Map<Boolean, List<Integer>> collect = integers.stream().
+                collect(Collectors.partitioningBy((value) -> value % 2 == 0));
+        return collect.get(collect.get(false).size() % 2 != 0);
     }
 }
 
