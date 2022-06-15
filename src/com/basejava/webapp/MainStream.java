@@ -1,7 +1,9 @@
 package com.basejava.webapp;
 
 import com.basejava.webapp.exception.StorageException;
+import com.basejava.webapp.model.ListSection;
 import com.basejava.webapp.model.Resume;
+import com.basejava.webapp.model.SectionType;
 import com.basejava.webapp.storage.ListStorage;
 
 import java.io.IOException;
@@ -28,17 +30,25 @@ public class MainStream {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("Biggest file in the directory: " + path + " is " + biggestFile(path) + " (" + size + ")");
+        System.out.println("Biggest file in the directory: " + path + " is " + biggestFile(path) + " (" + size + ")\n");
 
+        System.out.println("Delete all words from string that longer than 5 letters \n" +
+                "One two three four five, bigger stronger, harder = " +
+                deleteAllWordsLongerThen5Symbols("One two three four five, bigger stronger, harder") + "\n");
+
+        System.out.println("Take form xml file strings at " + "version" + "tag : \n" + Arrays.toString(takeFromXML("version")) + "\n");
 
         ListStorage storage = new ListStorage();
         storage.save(ResumeTestData.newResumeWithSectionsNaliev("001", "Nikita Aliev"));
-        storage.save(ResumeTestData.newResumeWithSectionsNaliev("002", "Sergey Pavlov"));
-        storage.save(ResumeTestData.newResumeWithSectionsNaliev("003", "Irina Avdeeva"));
+        storage.save(ResumeTestData.newResumeWithSectionsPavlov("002", "Sergey Pavlov"));
+        storage.save(ResumeTestData.newResumeWithSectionsAvdeeva("003", "Irina Avdeeva"));
 
         storage.stream().forEach(System.out::println);
 
         System.out.println("Longest name: " + longestName(storage));
+
+        System.out.println("Resumes with less than 5 qualifications " + lessThenFiveQualificationsOnly(storage).
+                stream().map(Resume::toString).collect(Collectors.joining(" ")));
 
     }
 
@@ -99,6 +109,31 @@ public class MainStream {
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static String deleteAllWordsLongerThen5Symbols(String s) {
+        return Arrays.stream(s.split(" ")).
+                filter(string -> string.length() <= 5).
+                collect(Collectors.joining(" "));
+    }
+
+    private static ListStorage lessThenFiveQualificationsOnly(ListStorage storage) {
+        List<Resume> list = storage.stream().
+                filter(resume -> ((ListSection) resume.getSection(SectionType.QUALIFICATIONS)).getList().size() < 5).
+                sorted().collect(Collectors.toList());
+        ListStorage newList = new ListStorage();
+        list.forEach(newList::save);
+        return newList;
+    }
+
+    private static String[] takeFromXML(String tag) {
+        String[] xmlStrings = {"<dependency>", "<groupId>junit</groupId>", "<artifactId>junit</artifactId>",
+                "<version>4.4</version>", "<scope>test</scope>", "</dependency>", "<dependency>",
+                "<groupId>org.powermock</groupId>", "<artifactId>powermock-reflect</artifactId>",
+                "<version>3.2</version>", "</dependency>"};
+        return Arrays.stream(xmlStrings).filter(s -> s.startsWith("<" + tag + ">")).
+                map(s -> s.replaceAll("[<>/"+tag+"]","")).toArray(String[]::new);
+
     }
 }
 
