@@ -6,6 +6,7 @@ import com.basejava.webapp.util.DateUtil;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 public class ResumeTestData {
     public static void main(String[] args) {
@@ -70,7 +71,12 @@ public class ResumeTestData {
                 "Undergraduate", "Creation and automation of computing systems"));
         mgu.addPeriod(new Period(DateUtil.of(2015, Month.SEPTEMBER), DateUtil.of(2021, Month.JUNE),
                 "Graduate school", "Creation and automation of computing systems"));
-
+        resume.addSection(SectionType.EDUCATION, new OrganizationSection(new ArrayList<>(Collections.singletonList(mgu))));
+        Organization epam = new Organization("EPAM Systems","Enterprice software development", "epam.com");
+        epam.addPeriod(new Period(DateUtil.of(2015, Month.DECEMBER), DateUtil.NOW,
+                "developer","Network related applications developer")
+        );
+        resume.addSection(SectionType.EXPERIENCE, new OrganizationSection(new ArrayList<>(Collections.singletonList(epam))));
         return resume;
     }
 

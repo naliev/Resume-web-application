@@ -1,9 +1,7 @@
 package com.basejava.webapp;
 
 import com.basejava.webapp.exception.StorageException;
-import com.basejava.webapp.model.ListSection;
-import com.basejava.webapp.model.Resume;
-import com.basejava.webapp.model.SectionType;
+import com.basejava.webapp.model.*;
 import com.basejava.webapp.storage.ListStorage;
 
 import java.io.IOException;
@@ -49,6 +47,8 @@ public class MainStream {
 
         System.out.println("Resumes with less than 5 qualifications " + lessThenFiveQualificationsOnly(storage).
                 stream().map(Resume::toString).collect(Collectors.joining(" ")));
+
+        System.out.println("First three organizations, ordered by name: " + Arrays.toString(firstThreeOrganizationsFromStorage(storage)));
 
     }
 
@@ -134,6 +134,14 @@ public class MainStream {
         return Arrays.stream(xmlStrings).filter(s -> s.startsWith("<" + tag + ">")).
                 map(s -> s.replaceAll("[<>/"+tag+"]","")).toArray(String[]::new);
 
+    }
+
+    private static String[] firstThreeOrganizationsFromStorage(ListStorage storage) {
+        return storage.stream().flatMap(resume -> resume.getSection(SectionType.EDUCATION)
+                == null ? Stream.empty() : ((OrganizationSection) resume.getSection(SectionType.EDUCATION)).
+                getOrganizations().stream().map(Organization::getTitle)).distinct().sorted(
+                    String::compareToIgnoreCase)
+                .limit(3).toArray(String[]::new);
     }
 }
 
