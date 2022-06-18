@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -20,6 +21,8 @@ public class MainStream {
         System.out.println("Odd or even result: " + oddOrEven(new ArrayList<>(Arrays.asList(1, 4, 6, 8, 9, 1))));
         System.out.println("Sorted odd number: " + oddSorted(new ArrayList<>(Arrays.asList(1, 9, 8, 5, 1, 3, 6, 6))));
         System.out.println();
+
+        System.out.println("Is sum of digits in number 1034 is odd: " + isDigitsSumIsOdd(1034));
 
         Path path = Paths.get("/home/naliev/IdeaProjects/BaseJava/storage");
         long size;
@@ -34,7 +37,8 @@ public class MainStream {
                 "One two three four five, bigger stronger, harder = " +
                 deleteAllWordsLongerThen5Symbols("One two three four five, bigger stronger, harder") + "\n");
 
-        System.out.println("Take form xml file strings at " + "version" + "tag : \n" + Arrays.toString(takeFromXML("version")) + "\n");
+        System.out.println("Take form xml file strings at " + "version" + "tag : \n" +
+                Arrays.toString(takeFromXML("version")) + "\n");
 
         ListStorage storage = new ListStorage();
         storage.save(ResumeTestData.newResumeWithSectionsNaliev("001", "Nikita Aliev"));
@@ -48,8 +52,21 @@ public class MainStream {
         System.out.println("Resumes with less than 5 qualifications " + lessThenFiveQualificationsOnly(storage).
                 stream().map(Resume::toString).collect(Collectors.joining(" ")));
 
-        System.out.println("First three organizations, ordered by name: " + Arrays.toString(firstThreeOrganizationsFromStorage(storage)));
+        System.out.println("First three organizations, ordered by name: " +
+                Arrays.toString(firstThreeOrganizationsFromStorage(storage)));
 
+        System.out.println("Full names of resume owners that starts with letters: A B C D F" +
+                Arrays.toString(fullNamesWhichStartsWithLetter(storage, "A", "B", "C", "D", "F")));
+
+    }
+
+    private static boolean isDigitsSumIsOdd(int number) {
+        OptionalInt sum = String.valueOf(number).chars().reduce(Integer::sum);
+        if (sum.isPresent()) {
+            return sum.getAsInt() % 2 == 0;
+        } else {
+            return false;
+        }
     }
 
     private static int minValue(int[] values) {
@@ -127,21 +144,36 @@ public class MainStream {
     }
 
     private static String[] takeFromXML(String tag) {
-        String[] xmlStrings = {"<dependency>", "<groupId>junit</groupId>", "<artifactId>junit</artifactId>",
-                "<version>4.4</version>", "<scope>test</scope>", "</dependency>", "<dependency>",
+        String[] xmlStrings = {
+                "<dependency>",
+                "<groupId>junit</groupId>", "<artifactId>junit</artifactId>",
+                "<version>4.4</version>", "<scope>test</scope>",
+                "</dependency>",
+                "<dependency>",
                 "<groupId>org.powermock</groupId>", "<artifactId>powermock-reflect</artifactId>",
-                "<version>3.2</version>", "</dependency>"};
+                "<version>3.2</version>",
+                "</dependency>"};
         return Arrays.stream(xmlStrings).filter(s -> s.startsWith("<" + tag + ">")).
-                map(s -> s.replaceAll("[<>/"+tag+"]","")).toArray(String[]::new);
+                map(s -> s.replaceAll("[<>/" + tag + "]", "")).toArray(String[]::new);
 
     }
 
     private static String[] firstThreeOrganizationsFromStorage(ListStorage storage) {
         return storage.stream().flatMap(resume -> resume.getSection(SectionType.EDUCATION)
-                == null ? Stream.empty() : ((OrganizationSection) resume.getSection(SectionType.EDUCATION)).
-                getOrganizations().stream().map(Organization::getTitle)).distinct().sorted(
-                    String::compareToIgnoreCase)
+                        == null ? Stream.empty() : ((OrganizationSection) resume.getSection(SectionType.EDUCATION)).
+                        getOrganizations().stream().map(Organization::getTitle)).distinct().sorted(
+                        String::compareToIgnoreCase)
                 .limit(3).toArray(String[]::new);
+    }
+
+    private static String[] fullNamesWhichStartsWithLetter(ListStorage storage, String... letters) {
+        return storage.stream().flatMap((Function<Resume, Stream<String>>) resume ->
+                Arrays.stream(resume.getFullName().split(" "))).filter(s -> {
+            for (String letter : letters) {
+                if (s.startsWith(letter)) return true;
+            }
+            return false;
+        }).toArray(String[]::new);
     }
 }
 
