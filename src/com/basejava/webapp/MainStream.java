@@ -7,7 +7,6 @@ import com.basejava.webapp.storage.ListStorage;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -24,7 +23,7 @@ public class MainStream {
 
         System.out.println("Is sum of digits in number 1034 is odd: " + isDigitsSumIsOdd(1034));
 
-        Path path = Paths.get("/home/naliev/IdeaProjects/BaseJava/storage");
+        Path path = Config.getConfig().getStorageDir().toPath();
         long size;
         try {
             size = Files.size(path);

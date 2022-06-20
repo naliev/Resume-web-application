@@ -1,11 +1,10 @@
 package com.basejava.webapp.storage;
 
+import com.basejava.webapp.Config;
 import com.basejava.webapp.storage.strategy.ObjectStreamSerializer;
-
-import java.io.File;
 
 public class ObjectStreamStorageTest extends AbstractStorageTest {
     public ObjectStreamStorageTest() {
-        super(new FileStorage(new File("/home/naliev/IdeaProjects/BaseJava/storage"), new ObjectStreamSerializer()));
+        super(new FileStorage(Config.getConfig().getStorageDir(), new ObjectStreamSerializer()));
     }
 }
