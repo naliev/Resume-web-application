@@ -8,7 +8,6 @@ import com.basejava.webapp.sql.SqlHelper;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,15 +22,11 @@ public class SqlStorage implements Storage {
     @Override
     public int size() {
         return sqlHelper.ExecuteAndProcessQuery("SELECT COUNT(uuid) as count FROM resume", ps -> {
-            try {
-                ResultSet resultSet = ps.executeQuery();
-                if (resultSet.next()) {
-                    return resultSet.getInt("count");
-                } else {
-                    return 0;
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+            ResultSet resultSet = ps.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt("count");
+            } else {
+                return 0;
             }
         });
     }
@@ -54,10 +49,10 @@ public class SqlStorage implements Storage {
         return sqlHelper.ExecuteAndProcessQuery("SELECT full_name FROM resume WHERE uuid = ?", ps -> {
             ps.setString(1, uuid);
             ResultSet resultSet = ps.executeQuery();
-            if (resultSet.next()) {
-                return new Resume(uuid, resultSet.getString("full_name"));
-            } else {
+            if (!resultSet.next()) {
                 throw new NotExistStorageException(uuid);
+            } else {
+                return new Resume(uuid, resultSet.getString("full_name"));
             }
         });
     }
@@ -96,9 +91,11 @@ public class SqlStorage implements Storage {
 
     @Override
     public void delete(String uuid) {
-        sqlHelper.ExecuteAndProcessQuery("DELETE FROM resume WHERE (uuid = ?)", ps -> {
+        sqlHelper.<Void>ExecuteAndProcessQuery("DELETE FROM resume WHERE (uuid = ?)", ps -> {
             ps.setString(1, uuid);
-            ps.executeUpdate();
+            if (ps.executeUpdate() == 0) {
+                throw new NotExistStorageException(uuid);
+            }
             return null;
         });
     }
