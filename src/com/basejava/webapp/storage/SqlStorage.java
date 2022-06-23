@@ -1,6 +1,5 @@
 package com.basejava.webapp.storage;
 
-import com.basejava.webapp.exception.ExistStorageException;
 import com.basejava.webapp.exception.NotExistStorageException;
 import com.basejava.webapp.model.Resume;
 import com.basejava.webapp.sql.SqlHelper;
@@ -23,17 +22,14 @@ public class SqlStorage implements Storage {
     public int size() {
         return sqlHelper.ExecuteAndProcessQuery("SELECT COUNT(uuid) as count FROM resume", ps -> {
             ResultSet resultSet = ps.executeQuery();
-            if (resultSet.next()) {
-                return resultSet.getInt("count");
-            } else {
-                return 0;
-            }
+            return resultSet.next() ? resultSet.getInt(1) : 0;
         });
     }
 
     @Override
     public List<Resume> getAllSorted() {
-        return sqlHelper.ExecuteAndProcessQuery("SELECT trim(uuid) as uuid, full_name FROM resume ORDER BY uuid DESC", ps -> {
+        return sqlHelper.ExecuteAndProcessQuery("SELECT trim(uuid) as uuid, full_name" +
+                                                " FROM resume ORDER BY full_name, uuid DESC", ps -> {
             ResultSet resultSet = ps.executeQuery();
             List<Resume> resumeList = new ArrayList<>();
             while (resultSet.next()) {
@@ -51,9 +47,8 @@ public class SqlStorage implements Storage {
             ResultSet resultSet = ps.executeQuery();
             if (!resultSet.next()) {
                 throw new NotExistStorageException(uuid);
-            } else {
-                return new Resume(uuid, resultSet.getString("full_name"));
             }
+            return new Resume(uuid, resultSet.getString("full_name"));
         });
     }
 
@@ -76,17 +71,12 @@ public class SqlStorage implements Storage {
 
     @Override
     public void save(Resume r) {
-        try {
-            sqlHelper.<Boolean>ExecuteAndProcessQuery("INSERT INTO resume VALUES (?, ?)", ps -> {
-                ps.setString(1, r.getUuid());
-                ps.setString(2, r.getFullName());
-                ps.execute();
-                return true;
-            });
-        } catch (Exception e) {
-            throw new ExistStorageException(r.getUuid());
-        }
-
+        sqlHelper.<Boolean>ExecuteAndProcessQuery("INSERT INTO resume VALUES (?, ?)", ps -> {
+            ps.setString(1, r.getUuid());
+            ps.setString(2, r.getFullName());
+            ps.execute();
+            return true;
+        });
     }
 
     @Override
