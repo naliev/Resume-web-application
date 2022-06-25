@@ -11,7 +11,7 @@ public class SqlHelper {
         this.connectionFactory = connectionFactory;
     }
 
-    public <T> T ExecuteAndProcessQuery(String query, SqlProcessor<T> sqlProcessor) {
+    public <T> T executeAndProcessQuery(String query, SqlProcessor<T> sqlProcessor) {
         try (Connection conn = connectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
             return sqlProcessor.process(ps);
