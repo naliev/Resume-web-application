@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -19,9 +20,13 @@ public class MainStream {
         System.out.println("Min value result: " + minValue(new int[]{8, 2, 2, 3, 9}));
         System.out.println("Odd or even result: " + oddOrEven(new ArrayList<>(Arrays.asList(1, 4, 6, 8, 9, 1))));
         System.out.println("Sorted odd number: " + oddSorted(new ArrayList<>(Arrays.asList(1, 9, 8, 5, 1, 3, 6, 6))));
+        System.out.println("Prime number within array " + numberOfPrimesFromArray(new Integer[] {1,5,6,7,8,9,10}));
         System.out.println();
 
         System.out.println("Is sum of digits in number 1034 is odd: " + isDigitsSumIsOdd(1034));
+
+        System.out.println("Number of vowel letters in string: \"Hello world!\": " + numberOfVowelsInString("Hello world!"));
+
 
         Path path = Config.getConfig().getStorageDir().toPath();
         long size;
@@ -56,6 +61,7 @@ public class MainStream {
 
         System.out.println("Full names of resume owners that starts with letters: A B C D F" +
                 Arrays.toString(fullNamesWhichStartsWithLetter(storage, "A", "B", "C", "D", "F")));
+
 
     }
 
@@ -174,6 +180,32 @@ public class MainStream {
             return false;
         }).toArray(String[]::new);
     }
-}
 
+    private static int numberOfPrimesFromArray (Integer[] array) {
+        Predicate<Integer> isPrime = (num) -> {
+            if (num < 2) return false;
+
+            for (int i = 2; i <= num / 2; i++) {
+                if (num % i == 0){
+                    return false;
+                }
+            }
+            return true;
+        };
+        Function<Integer[], Integer> func = (a)-> {
+            int primeCount = 0;
+            for (int number: a) {
+                if(isPrime.test(number)) {
+                    primeCount++;
+                }
+            }
+            return primeCount;
+        };
+        return func.apply(array);
+    }
+
+    private static int numberOfVowelsInString(String s) {
+        return s.length() -  s.toLowerCase().replaceAll("[aeioquy]","").length();
+    }
+}
 
