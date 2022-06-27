@@ -3,7 +3,6 @@ package com.basejava.webapp.storage;
 import com.basejava.webapp.exception.NotExistStorageException;
 import com.basejava.webapp.model.ContactType;
 import com.basejava.webapp.model.Resume;
-import com.basejava.webapp.sql.ExceptionUtil;
 import com.basejava.webapp.sql.SqlHelper;
 
 import java.sql.*;
@@ -124,7 +123,7 @@ public class SqlStorage implements Storage {
         });
     }
 
-    private void insertContactsIntoDB(Connection conn, Resume r) {
+    private void insertContactsIntoDB(Connection conn, Resume r) throws SQLException{
         try (PreparedStatement ps = conn.prepareStatement("" +
                 "INSERT INTO contract (resume_uuid, type, value) VALUES (?,?,?)")) {
             for (Map.Entry<ContactType, String> c : r.getContacts().entrySet()) {
@@ -134,8 +133,6 @@ public class SqlStorage implements Storage {
                 ps.addBatch();
             }
             ps.executeBatch();
-        } catch (SQLException e) {
-            throw ExceptionUtil.convertException(e);
         }
     }
 
