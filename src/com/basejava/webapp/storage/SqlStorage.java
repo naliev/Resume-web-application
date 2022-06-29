@@ -16,6 +16,11 @@ public class SqlStorage implements Storage {
     public final SqlHelper sqlHelper;
 
     public SqlStorage(String dbUrl, String dbUser, String dbPassword) {
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            throw new IllegalStateException(e);
+        }
         sqlHelper = new SqlHelper(() -> DriverManager.getConnection(dbUrl, dbUser, dbPassword));
     }
 
@@ -32,7 +37,7 @@ public class SqlStorage implements Storage {
         return sqlHelper.execute("" +
                 "SELECT trim(r.uuid) as uuid, r.full_name as full_name, c.type as type, c.value as value " +
                 "FROM resume r LEFT JOIN contract c on r.uuid = c.resume_uuid " +
-                "ORDER BY full_name, uuid DESC", ps -> {
+                "ORDER BY full_name, uuid", ps -> {
             ResultSet resultSet = ps.executeQuery();
             List<Resume> resumeList = new ArrayList<>();
             String previousUuid = "";
@@ -138,7 +143,7 @@ public class SqlStorage implements Storage {
 
     private void insertContactIntoResume(ResultSet rs, Resume r) throws SQLException {
         if (rs.getString("type") != null) {
-            r.addContact(ContactType.valueOf(rs.getString("type")),
+            r.addContact(ContactType.valueOf(rs.getString("type").toUpperCase()),
                     rs.getString("Value")
             );
         }

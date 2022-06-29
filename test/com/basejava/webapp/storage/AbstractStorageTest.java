@@ -1,5 +1,6 @@
 package com.basejava.webapp.storage;
 
+import com.basejava.webapp.ResumeTestData;
 import com.basejava.webapp.exception.ExistStorageException;
 import com.basejava.webapp.exception.NotExistStorageException;
 import com.basejava.webapp.exception.StorageException;
@@ -20,16 +21,15 @@ public abstract class AbstractStorageTest {
     private static final String FULL_NAME_2 = "Maxim Pavlov";
     private static final String FULL_NAME_3 = "Georgy Ivanov";
     private static final String UUID_NOT_EXIST = "dummy";
+    private static final Resume RESUME_1 = ResumeTestData.newResumeWithSectionsPavlov(UUID_1, FULL_NAME_1);
+    private static final Resume RESUME_2 = ResumeTestData.newResumeWithSectionsPavlov(UUID_2, FULL_NAME_2);
+    private static final Resume RESUME_3 = ResumeTestData.newResumeWithSectionsAvdeeva(UUID_3, FULL_NAME_3);
+    private static final Resume RESUME_NEW = ResumeTestData.newResumeWithSectionsNaliev("New", "Ivan Ivanov");
 
-//    private static final Resume RESUME_1 = ResumeTestData.newResumeWithSectionsNaliev(UUID_1, FULL_NAME_1);
-//    private static final Resume RESUME_2 = ResumeTestData.newResumeWithSectionsPavlov(UUID_2, FULL_NAME_2);
-//    private static final Resume RESUME_3 = ResumeTestData.newResumeWithSectionsAvdeeva(UUID_3, FULL_NAME_3);
-//    private static final Resume RESUME_NEW = ResumeTestData.newResumeWithSectionsNaliev("New", "Ivan Ivanov");
-
-    private static final Resume RESUME_1 = new Resume(UUID_1, FULL_NAME_1);
-    private static final Resume RESUME_2 = new Resume(UUID_2, FULL_NAME_2);
-    private static final Resume RESUME_3 = new Resume(UUID_3, FULL_NAME_3);
-    private static final Resume RESUME_NEW = new Resume("New", "Ivan Ivanov");
+//    private static final Resume RESUME_1 = new Resume(UUID_1, FULL_NAME_1);
+//    private static final Resume RESUME_2 = new Resume(UUID_2, FULL_NAME_2);
+//    private static final Resume RESUME_3 = new Resume(UUID_3, FULL_NAME_3);
+//    private static final Resume RESUME_NEW = new Resume("New", "Ivan Ivanov");
 
 
     protected AbstractStorageTest(Storage storage) {
