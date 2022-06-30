@@ -1,8 +1,7 @@
 package com.basejava.webapp.storage;
 
 import com.basejava.webapp.exception.NotExistStorageException;
-import com.basejava.webapp.model.ContactType;
-import com.basejava.webapp.model.Resume;
+import com.basejava.webapp.model.*;
 import com.basejava.webapp.sql.SqlHelper;
 
 import java.sql.*;
@@ -44,7 +43,7 @@ public class SqlStorage implements Storage {
                 String uuid = resultSet.getString("uuid");
                 Resume r = new Resume(uuid,
                         resultSet.getString("full_name"));
-                resumeMap.put(uuid,r);
+                resumeMap.put(uuid, r);
             }
             return resumeMap;
         });
@@ -94,6 +93,8 @@ public class SqlStorage implements Storage {
                 }
                 deleteContractsFromDB(r);
                 insertContactsIntoDB(conn, r);
+                deleteSectionsFromDB(r);
+                insertSectionsIntoDB(conn, r);
             }
             return null;
         });
@@ -109,6 +110,7 @@ public class SqlStorage implements Storage {
                     throw new NotExistStorageException(r.getUuid());
                 }
                 insertContactsIntoDB(conn, r);
+                insertSectionsIntoDB(conn, r);
             }
             return null;
         });
@@ -140,6 +142,38 @@ public class SqlStorage implements Storage {
                 ps.setString(1, r.getUuid());
                 ps.setString(2, c.getKey().getTitle());
                 ps.setString(3, c.getValue());
+                ps.addBatch();
+            }
+            ps.executeBatch();
+        }
+    }
+
+    private void deleteSectionsFromDB(Resume r) {
+        sqlHelper.<Void>execute("DELETE FROM section WHERE resume_uuid=?", ps -> {
+            ps.setString(1, r.getUuid());
+            ps.execute();
+            return null;
+        });
+    }
+
+    private void insertSectionsIntoDB(Connection conn, Resume r) throws SQLException {
+        try (PreparedStatement ps = conn.prepareStatement("" +
+                "INSERT INTO section (type, value, resume_uuid) VALUES (?,?,?)")) {
+            for (Map.Entry<SectionType, AbstractSection> entries :r.getSections().entrySet()){
+                SectionType type = entries.getKey();
+                AbstractSection section = entries.getValue();
+                switch (type) {
+                    case PERSONAL:
+                    case OBJECTIVE:
+                        ps.setString(2, ((TextSection) section).getText());
+                        break;
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS:
+                        ps.setString(2, String.join("\n", ((ListSection) section).getList()));
+                        break;
+                }
+                ps.setString(1, type.getTitle());
+                ps.setString(3, r.getUuid());
                 ps.addBatch();
             }
             ps.executeBatch();
