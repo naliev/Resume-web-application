@@ -7,9 +7,9 @@ import com.basejava.webapp.sql.SqlHelper;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class SqlStorage implements Storage {
 
@@ -34,24 +34,29 @@ public class SqlStorage implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
-        return sqlHelper.execute("" +
-                "SELECT trim(r.uuid) as uuid, r.full_name as full_name, c.type as type, c.value as value " +
-                "FROM resume r LEFT JOIN contract c on r.uuid = c.resume_uuid " +
+        HashMap<String, Resume> resumes = sqlHelper.execute("" +
+                "SELECT trim(r.uuid) as uuid, r.full_name as full_name " +
+                "FROM resume r " +
                 "ORDER BY full_name, uuid", ps -> {
             ResultSet resultSet = ps.executeQuery();
-            List<Resume> resumeList = new ArrayList<>();
-            String previousUuid = "";
-            Resume r = null;
+            HashMap<String, Resume> resumeMap = new HashMap<>();
             while (resultSet.next()) {
-                if (!Objects.equals(resultSet.getString("uuid"), previousUuid)) {
-                    r = new Resume(resultSet.getString("uuid"),
-                            resultSet.getString("full_name"));
-                }
-                insertContactIntoResume(resultSet, r);
-                resumeList.add(r);
+                String uuid = resultSet.getString("uuid");
+                Resume r = new Resume(uuid,
+                        resultSet.getString("full_name"));
+                resumeMap.put(uuid,r);
             }
-            return resumeList;
+            return resumeMap;
         });
+        sqlHelper.execute("SELECT type, value, trim(resume_uuid) AS resume_uuid from contract", ps -> {
+            ResultSet resultSet = ps.executeQuery();
+            while (resultSet.next()) {
+                String uuid = resultSet.getString("resume_uuid");
+                insertContactIntoResume(resultSet, resumes.get(uuid));
+            }
+            return null;
+        });
+        return new ArrayList<>(resumes.values());
     }
 
     @Override
@@ -128,7 +133,7 @@ public class SqlStorage implements Storage {
         });
     }
 
-    private void insertContactsIntoDB(Connection conn, Resume r) throws SQLException{
+    private void insertContactsIntoDB(Connection conn, Resume r) throws SQLException {
         try (PreparedStatement ps = conn.prepareStatement("" +
                 "INSERT INTO contract (resume_uuid, type, value) VALUES (?,?,?)")) {
             for (Map.Entry<ContactType, String> c : r.getContacts().entrySet()) {
