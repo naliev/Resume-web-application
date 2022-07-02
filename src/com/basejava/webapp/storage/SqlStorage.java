@@ -30,36 +30,40 @@ public class SqlStorage implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
-        HashMap<String, Resume> resumes = sqlHelper.execute("" +
-                "SELECT trim(r.uuid) as uuid, r.full_name as full_name " +
-                "FROM resume r " +
-                "ORDER BY full_name, uuid", ps -> {
-            ResultSet resultSet = ps.executeQuery();
-            HashMap<String, Resume> resumeMap = new HashMap<>();
-            while (resultSet.next()) {
-                String uuid = resultSet.getString("uuid");
-                Resume r = new Resume(uuid, resultSet.getString("full_name"));
-                resumeMap.put(uuid, r);
+        return sqlHelper.transactionExecute(conn -> {
+            Map<String, Resume> resumes = new HashMap<>();
+            try (PreparedStatement ps = conn.prepareStatement("" +
+                    "SELECT trim(r.uuid) as uuid, r.full_name as full_name " +
+                    "FROM resume r " +
+                    "ORDER BY full_name, uuid")) {
+                ResultSet resultSet = ps.executeQuery();
+                while (resultSet.next()) {
+                    String uuid = resultSet.getString("uuid");
+                    Resume r = new Resume(uuid, resultSet.getString("full_name"));
+                    resumes.put(uuid, r);
+                }
             }
-            return resumeMap;
-        });
-        sqlHelper.execute("SELECT type, value, trim(resume_uuid) AS resume_uuid from contract", ps -> {
-            ResultSet resultSet = ps.executeQuery();
-            while (resultSet.next()) {
-                String uuid = resultSet.getString("resume_uuid");
-                insertContactIntoResume(resultSet, resumes.get(uuid));
+
+            try (PreparedStatement ps = conn.prepareStatement("" +
+                    "SELECT type, value, trim(resume_uuid) AS resume_uuid from contract")) {
+                ResultSet resultSet = ps.executeQuery();
+                while (resultSet.next()) {
+                    String uuid = resultSet.getString("resume_uuid");
+                    insertContactIntoResume(resultSet, resumes.get(uuid));
+                }
             }
-            return null;
-        });
-        sqlHelper.execute("SELECT type, value, trim(resume_uuid) AS resume_uuid from section", ps -> {
-            ResultSet resultSet = ps.executeQuery();
-            while (resultSet.next()) {
-                String uuid = resultSet.getString("resume_uuid");
-                insertSectionIntoResume(resultSet, resumes.get(uuid));
+
+            try (PreparedStatement ps = conn.prepareStatement("" +
+                    "SELECT type, value, trim(resume_uuid) AS resume_uuid from section")) {
+                ResultSet resultSet = ps.executeQuery();
+                while (resultSet.next()) {
+                    String uuid = resultSet.getString("resume_uuid");
+                    insertSectionIntoResume(resultSet, resumes.get(uuid));
+                }
             }
-            return null;
+
+            return new ArrayList<>(resumes.values());
         });
-        return new ArrayList<>(resumes.values());
     }
 
     @Override
