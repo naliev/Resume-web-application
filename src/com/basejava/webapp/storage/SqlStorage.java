@@ -38,8 +38,7 @@ public class SqlStorage implements Storage {
             HashMap<String, Resume> resumeMap = new HashMap<>();
             while (resultSet.next()) {
                 String uuid = resultSet.getString("uuid");
-                Resume r = new Resume(uuid,
-                        resultSet.getString("full_name"));
+                Resume r = new Resume(uuid, resultSet.getString("full_name"));
                 resumeMap.put(uuid, r);
             }
             return resumeMap;
@@ -213,10 +212,10 @@ public class SqlStorage implements Storage {
             String sectionValue = rs.getString("Value");
             String[] strings = sectionValue.split("\n");
 
-            r.addSection(SectionType.valueOf(rs.getString("type").toUpperCase()),
-                    (strings.length > 1) ? new ListSection(new ArrayList<>(Arrays.asList(strings))) :
-                            new TextSection(strings[0]));
+            r.addSection(
+                    SectionType.valueOf(rs.getString("type").toUpperCase()),
+                    (strings.length > 1) ?
+                            new ListSection(new ArrayList<>(Arrays.asList(strings))) : new TextSection(strings[0]));
         }
     }
-
 }
