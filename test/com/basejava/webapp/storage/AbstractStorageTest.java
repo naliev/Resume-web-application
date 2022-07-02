@@ -19,9 +19,9 @@ public abstract class AbstractStorageTest {
     private static final String UUID_3 = "N3";
     private static final String FULL_NAME_1 = "Nikita Aliev";
     private static final String FULL_NAME_2 = "Maxim Pavlov";
-    private static final String FULL_NAME_3 = "Georgy Ivanov";
+    private static final String FULL_NAME_3 = "Avdeeva Irina";
     private static final String UUID_NOT_EXIST = "dummy";
-    private static final Resume RESUME_1 = ResumeTestData.newResumeWithSectionsPavlov(UUID_1, FULL_NAME_1);
+    private static final Resume RESUME_1 = ResumeTestData.newResumeWithSectionsNaliev(UUID_1, FULL_NAME_1);
     private static final Resume RESUME_2 = ResumeTestData.newResumeWithSectionsPavlov(UUID_2, FULL_NAME_2);
     private static final Resume RESUME_3 = ResumeTestData.newResumeWithSectionsAvdeeva(UUID_3, FULL_NAME_3);
     private static final Resume RESUME_NEW = ResumeTestData.newResumeWithSectionsNaliev("New", "Ivan Ivanov");
@@ -54,7 +54,7 @@ public abstract class AbstractStorageTest {
         assertSize(3);
         List<Resume> resumes = storage.getAllSorted();
         Assertions.assertEquals(3, resumes.size());
-        Assertions.assertEquals(Arrays.asList(RESUME_3, RESUME_2, RESUME_1), resumes);
+        Assertions.assertEquals(Arrays.asList(RESUME_1, RESUME_2, RESUME_3), resumes);
     }
 
     @Test
