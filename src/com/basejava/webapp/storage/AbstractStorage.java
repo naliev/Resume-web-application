@@ -12,7 +12,7 @@ public abstract class AbstractStorage<SK> implements Storage {
         if (o1.getFullName().equals(o2.getFullName())) {
             return o1.compareTo(o2);
         } else {
-            return o1.getFullName().compareTo(o2.getFullName());
+            return o1.getUuid().compareTo(o2.getUuid());
         }
     };
 
