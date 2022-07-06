@@ -181,7 +181,7 @@ public class SqlStorage implements Storage {
                 "INSERT INTO contract (resume_uuid, type, value) VALUES (?,?,?)")) {
             for (Map.Entry<ContactType, String> c : r.getContacts().entrySet()) {
                 ps.setString(1, r.getUuid());
-                ps.setString(2, c.getKey().getTitle());
+                ps.setString(2, c.getKey().name());
                 ps.setString(3, c.getValue());
                 ps.addBatch();
             }
