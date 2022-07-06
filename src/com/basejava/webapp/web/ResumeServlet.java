@@ -1,6 +1,7 @@
 package com.basejava.webapp.web;
 
 import com.basejava.webapp.Config;
+import com.basejava.webapp.model.Resume;
 import com.basejava.webapp.storage.SqlStorage;
 
 import javax.servlet.ServletConfig;
@@ -22,8 +23,30 @@ public class ResumeServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setAttribute("resumes", storage.getAllSorted());
-        request.getRequestDispatcher("/WEB-INF/jsp/resume.jsp").forward(request,response);
+        String action = request.getParameter("action");
+        String uuid = request.getParameter("uuid");
+        if (action == null) {
+            request.setAttribute("resumes", storage.getAllSorted());
+            request.getRequestDispatcher("/WEB-INF/jsp/resume.jsp").forward(request, response);
+            return;
+        }
+        Resume resume;
+        switch (action) {
+            case "view":
+            case "edit":
+                resume = storage.get(uuid);
+                break;
+            case "delete":
+                storage.delete(uuid);
+                response.sendRedirect("resume");
+                return;
+            default:
+                throw new IllegalArgumentException("Action " + action + " is illegal");
+        }
+        request.setAttribute("resume", resume);
+        request.getRequestDispatcher(
+                action.equals("view") ? "/WEB-INF/jsp/resumeView.jsp" : "/WEB-INF/jsp/resumeEdit.jsp").
+                forward(request, response);
     }
 
     @Override
