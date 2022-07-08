@@ -43,7 +43,7 @@ public class Resume implements Comparable<Resume>, Serializable {
     }
 
     public Map<ContactType, String> getContacts() {
-        return new EnumMap<>(contacts);
+        return contacts;
     }
 
     public Map<SectionType, AbstractSection> getSections() {
