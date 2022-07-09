@@ -47,7 +47,7 @@ public class Resume implements Comparable<Resume>, Serializable {
     }
 
     public Map<SectionType, AbstractSection> getSections() {
-        return new EnumMap<>(sections);
+        return sections;
     }
 
     public String getContact(ContactType contactType) {
