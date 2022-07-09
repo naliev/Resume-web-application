@@ -1,8 +1,7 @@
 package com.basejava.webapp.web;
 
 import com.basejava.webapp.Config;
-import com.basejava.webapp.model.ContactType;
-import com.basejava.webapp.model.Resume;
+import com.basejava.webapp.model.*;
 import com.basejava.webapp.storage.SqlStorage;
 
 import javax.servlet.ServletConfig;
@@ -11,6 +10,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ResumeServlet extends HttpServlet {
 
@@ -33,6 +36,9 @@ public class ResumeServlet extends HttpServlet {
         }
         Resume resume;
         switch (action) {
+            case "add":
+                resume = new Resume();
+                break;
             case "view":
             case "edit":
                 resume = storage.get(uuid);
@@ -46,7 +52,7 @@ public class ResumeServlet extends HttpServlet {
         }
         request.setAttribute("resume", resume);
         request.getRequestDispatcher(
-                action.equals("view") ? "/WEB-INF/jsp/resumeView.jsp" : "/WEB-INF/jsp/resumeEdit.jsp").
+                        action.equals("view") ? "/WEB-INF/jsp/resumeView.jsp" : "/WEB-INF/jsp/resumeEdit.jsp").
                 forward(request, response);
     }
 
@@ -55,8 +61,17 @@ public class ResumeServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String uuid = request.getParameter("uuid");
         String fullName = request.getParameter("fullName");
-        Resume r = storage.get(uuid);
-        r.setFullName(fullName);
+        boolean resumeCreation = (uuid == null) || (uuid.length() == 0);
+        Resume r;
+        if (resumeCreation) {
+            r = new Resume(fullName);
+        } else {
+            r = storage.get(uuid);
+            r.setFullName(fullName);
+        }
+        if (fullName != null && fullName.trim().length() != 0) {
+            r.setFullName(fullName);
+        }
         for (ContactType type : ContactType.values()) {
             String value = request.getParameter(type.name());
             if (value != null && value.trim().length() != 0) {
@@ -65,7 +80,30 @@ public class ResumeServlet extends HttpServlet {
                 r.getContacts().remove(type);
             }
         }
-        storage.update(r);
+        for (SectionType type : SectionType.values()) {
+            String value = request.getParameter(type.name());
+            if (value != null && value.trim().length() != 0) {
+                switch (type) {
+                    case PERSONAL:
+                    case OBJECTIVE:
+                        r.addSection(type, new TextSection(value));
+                        break;
+                    case QUALIFICATIONS:
+                    case ACHIEVEMENT:
+                        List<String> sectionList = Arrays.stream(value.split("\n"))
+                                .filter((s -> s.length() > 0)).collect(Collectors.toList());
+                        r.addSection(type, new ListSection(new ArrayList<>(sectionList)));
+                        break;
+                }
+            } else {
+                r.getSections().remove(type);
+            }
+        }
+        if (resumeCreation) {
+            storage.save(r);
+        } else {
+            storage.update(r);
+        }
         response.sendRedirect("resume");
     }
 }
