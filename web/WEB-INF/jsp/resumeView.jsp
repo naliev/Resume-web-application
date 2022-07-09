@@ -12,13 +12,24 @@
 <section>
     <h2>${resume.fullName}&nbsp;<a href="resume?uuid=${resume.uuid}&action=edit"><img src="img/pencil.png"
                                                                                       alt="edit"></a></h2>
-    <p>
-        <c:forEach var="contactEntry" items="${resume.contacts}">
-            <jsp:useBean id="contactEntry"
-                         type="java.util.Map.Entry<com.basejava.webapp.model.ContactType, java.lang.String>"/>
-            <%=contactEntry.getKey().toHtml(contactEntry.getValue())%><br/>
-        </c:forEach>
-    </p>
+    <% if (!resume.getContacts().isEmpty()) {%>
+        <p>
+            <c:forEach var="contactEntry" items="${resume.contacts}">
+                <jsp:useBean id="contactEntry"
+                             type="java.util.Map.Entry<com.basejava.webapp.model.ContactType, java.lang.String>"/>
+                <%=contactEntry.getKey().toHtml(contactEntry.getValue())%><br/>
+            </c:forEach>
+        </p>
+    <%}%>
+    <% if (!resume.getSections().isEmpty()) {%>
+        <p>
+            <c:forEach var="sectionEntry" items="${resume.sections}">
+                <jsp:useBean id="sectionEntry"
+                             type="java.util.Map.Entry<com.basejava.webapp.model.SectionType, com.basejava.webapp.model.AbstractSection>"/>
+                ${sectionEntry.key.toHtml(sectionEntry.value)}
+            </c:forEach>
+        </p>
+    <%}%>
 </section>
 <jsp:include page="fragments/footer.jsp"/>
 </body>
