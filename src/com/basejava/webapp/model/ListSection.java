@@ -37,10 +37,12 @@ public class ListSection extends AbstractSection implements Serializable {
 
     @Override
     public String toString() {
+        if (list.isEmpty()) return null;
         StringBuilder builder = new StringBuilder();
         for (String text : list) {
-            builder.append("*").append(text).append("\n");
+            builder.append(text).append("\n");
         }
+        builder.delete(builder.length() - 1, builder.length());
         return builder.toString();
     }
 }
