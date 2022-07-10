@@ -46,7 +46,7 @@ public class SqlStorage implements Storage {
             }
 
             try (PreparedStatement ps = conn.prepareStatement("" +
-                    "SELECT type, value, trim(resume_uuid) AS resume_uuid from contract")) {
+                    "SELECT type, value, trim(resume_uuid) AS resume_uuid from contact")) {
                 ResultSet resultSet = ps.executeQuery();
                 while (resultSet.next()) {
                     String uuid = resultSet.getString("resume_uuid");
@@ -80,7 +80,7 @@ public class SqlStorage implements Storage {
                 r = new Resume(uuid, resultSet.getString("full_name"));
             }
 
-            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM contract WHERE resume_uuid =?")) {
+            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM contact WHERE resume_uuid =?")) {
                 ps.setString(1, uuid);
                 ResultSet resultSet = ps.executeQuery();
                 while (resultSet.next()) {
@@ -114,7 +114,7 @@ public class SqlStorage implements Storage {
                 if (ps.executeUpdate() == 0) {
                     throw new NotExistStorageException(r.getUuid());
                 }
-                deleteContractsFromDB(conn, r);
+                deleteContactsFromDB(conn, r);
                 insertContactsIntoDB(conn, r);
                 deleteSectionsFromDB(conn, r);
                 insertSectionsIntoDB(conn, r);
@@ -159,8 +159,8 @@ public class SqlStorage implements Storage {
         }
     }
 
-    private void deleteContractsFromDB(Connection conn, Resume r) throws SQLException {
-        deleteAttribute("DELETE FROM contract WHERE resume_uuid=?", conn, r.getUuid());
+    private void deleteContactsFromDB(Connection conn, Resume r) throws SQLException {
+        deleteAttribute("DELETE FROM contact WHERE resume_uuid=?", conn, r.getUuid());
     }
 
     private void deleteSectionsFromDB(Connection conn, Resume r) throws SQLException {
@@ -178,7 +178,7 @@ public class SqlStorage implements Storage {
 
     private void insertContactsIntoDB(Connection conn, Resume r) throws SQLException {
         try (PreparedStatement ps = conn.prepareStatement("" +
-                "INSERT INTO contract (resume_uuid, type, value) VALUES (?,?,?)")) {
+                "INSERT INTO contact (resume_uuid, type, value) VALUES (?,?,?)")) {
             for (Map.Entry<ContactType, String> c : r.getContacts().entrySet()) {
                 ps.setString(1, r.getUuid());
                 ps.setString(2, c.getKey().name());

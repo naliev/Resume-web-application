@@ -19,9 +19,9 @@ public class ResumeTestData {
         System.out.println("------Contacts------");
         StringBuilder stringBuilder = new StringBuilder();
         for (ContactType type : ContactType.values()) {
-            Object contract = resume.getContact(type);
-            if (contract != null) {
-                stringBuilder.append(type.getTitle()).append(": ").append(contract).append("\n");
+            Object contact = resume.getContact(type);
+            if (contact != null) {
+                stringBuilder.append(type.getTitle()).append(": ").append(contact).append("\n");
             }
         }
         System.out.println(stringBuilder);
@@ -45,9 +45,9 @@ public class ResumeTestData {
                 "logging", "Template method", "Singleton method"};
         resume.addSection(SectionType.QUALIFICATIONS, new ListSection(new ArrayList<>(Arrays.asList(qualificationList))));
 
-        Organization vogu = new Organization("Vologda university", "vogu35", null);
+        Organization vogu = new Organization("Vologda university", "Vologda university", "");
         vogu.addPeriod(new Period(DateUtil.of(2017, Month.JULY), DateUtil.of(2017, Month.SEPTEMBER),
-                "Preliminary Courses", null));
+                "Preliminary Courses", ""));
         vogu.addPeriod(new Period(DateUtil.of(2017, Month.SEPTEMBER), DateUtil.of(2021, Month.JUNE),
                 "Undergraduate","Informatics and Computer Engineering"));
         Organization javaOps = new Organization("JavaOps", "JavaOps", "https://javaops.ru/");
@@ -66,13 +66,13 @@ public class ResumeTestData {
         String[] qualificationList = {"Java core", "Unit testing", "Spring", "Hibernate"};
         resume.addSection(SectionType.QUALIFICATIONS, new ListSection(new ArrayList<>(Arrays.asList(qualificationList))));
 
-        Organization mgu = new Organization("Moscow government university", "mgu website", "msu.ru");
+        Organization mgu = new Organization("Moscow government university", "Moscow government university", "msu.ru");
         mgu.addPeriod(new Period(DateUtil.of(2011, Month.SEPTEMBER), DateUtil.of(2015, Month.MAY),
                 "Undergraduate", "Creation and automation of computing systems"));
         mgu.addPeriod(new Period(DateUtil.of(2015, Month.SEPTEMBER), DateUtil.of(2021, Month.JUNE),
                 "Graduate school", "Creation and automation of computing systems"));
         resume.addSection(SectionType.EDUCATION, new OrganizationSection(new ArrayList<>(Collections.singletonList(mgu))));
-        Organization epam = new Organization("EPAM Systems","Enterprice software development", "epam.com");
+        Organization epam = new Organization("EPAM Systems","Enterprise software development", "epam.com");
         epam.addPeriod(new Period(DateUtil.of(2015, Month.DECEMBER), DateUtil.NOW,
                 "developer","Network related applications developer")
         );
@@ -88,7 +88,7 @@ public class ResumeTestData {
         String[] qualificationList = {"Python core", "Django", "Laravel", "Kafka"};
         resume.addSection(SectionType.QUALIFICATIONS, new ListSection(new ArrayList<>(Arrays.asList(qualificationList))));
 
-        Organization vogu = new Organization("Saints petersburg university", "spu", null);
+        Organization vogu = new Organization("Saints petersburg university", "Saints petersburg university", "");
         vogu.addPeriod(new Period(DateUtil.of(2015, Month.SEPTEMBER), DateUtil.of(2020, Month.JUNE),
                 "Undergraduate","Informatics and Computer Engineering"));
         Organization javaOps = new Organization("JavaOps", "JavaOps", "https://javaops.ru/");
