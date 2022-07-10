@@ -4,14 +4,16 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Organization implements Serializable {
     private static final long SerialVersionUID = 1L;
+    public static final Organization EMPTY = new Organization("", "", Period.EMPTY);
     private String title;
     private Link website;
-    private final ArrayList<Period> periods = new ArrayList<>();
+    private List<Period> periods = new ArrayList<>();
 
     public Organization() {
     }
@@ -28,6 +30,25 @@ public class Organization implements Serializable {
         this.website = new Link(websiteName, websiteUrl);
     }
 
+    public Organization(String title, String websiteName, Period p) {
+        this.title = title;
+        this.website = new Link(websiteName, "");
+        periods = new ArrayList<>();
+        periods.add(p);
+    }
+
+    public Organization(Link website, List<Period> periods) {
+        title = website.getName();
+        this.website = website;
+        this.periods = periods;
+    }
+
+    public Organization(String title, Link website, List<Period> periods) {
+        this.title = title;
+        this.website = website;
+        this.periods = periods;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -36,7 +57,7 @@ public class Organization implements Serializable {
         return website;
     }
 
-    public ArrayList<Period> getPeriods() {
+    public List<Period> getPeriods() {
         return periods;
     }
 
