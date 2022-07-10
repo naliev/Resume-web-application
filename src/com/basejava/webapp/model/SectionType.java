@@ -52,10 +52,6 @@ public enum SectionType {
         return title;
     }
 
-//    public String toHtml(String value) {
-//        return (value == null) ? "" : toHtml0(value);
-//    }
-
     public String toHtml(AbstractSection section) {
         return (section == null) ? "" : toHtml0(section);
     }
