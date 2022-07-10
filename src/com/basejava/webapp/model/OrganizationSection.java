@@ -1,13 +1,15 @@
 package com.basejava.webapp.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 public class OrganizationSection extends AbstractSection implements Serializable {
     private static final long SerialVersionUID = 1L;
     public static final Organization EMPTY = new Organization("", "", Period.EMPTY);
-    private List<Organization> organizations;
+    private List<Organization> organizations = new ArrayList<>();
 
     public OrganizationSection() {
     }
@@ -15,6 +17,13 @@ public class OrganizationSection extends AbstractSection implements Serializable
     public OrganizationSection(List<Organization> organizations) {
         Objects.requireNonNull(organizations, "organizations must not be null");
         this.organizations = organizations;
+    }
+
+    public OrganizationSection(Organization ... organizations) {
+        Objects.requireNonNull(organizations, "organization must not be null");
+        this.organizations.addAll(Arrays.asList(organizations));
+
+
     }
 
     public List<Organization> getOrganizations() {

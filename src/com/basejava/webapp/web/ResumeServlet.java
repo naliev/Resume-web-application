@@ -38,7 +38,7 @@ public class ResumeServlet extends HttpServlet {
         Resume resume;
         switch (action) {
             case "add":
-                resume = new Resume();
+                resume = Resume.EMPTY;
                 break;
             case "view":
             case "edit":
