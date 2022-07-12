@@ -5,19 +5,19 @@ import com.basejava.webapp.util.DateUtil;
 import java.util.List;
 
 public enum SectionType {
-    PERSONAL("Личные качества") {
-        @Override
-        protected String toHtml0(AbstractSection section) {
-            return (((TextSection) section).getText().length() > 0) ?
-                    divSection(getTitle()) + "<div>" + ((TextSection) section).getText() + "</div>" :
-                    "";
-        }
-    },
     OBJECTIVE("Позиция") {
         @Override
         protected String toHtml0(AbstractSection section) {
             return (((TextSection) section).getText().length() > 0) ?
                     divSection(getTitle()) + "<div style='font-weight: bold'>" + ((TextSection) section).getText() + "</div>" :
+                    "";
+        }
+    },
+    PERSONAL("Личные качества") {
+        @Override
+        protected String toHtml0(AbstractSection section) {
+            return (((TextSection) section).getText().length() > 0) ?
+                    divSection(getTitle()) + "<div>" + ((TextSection) section).getText() + "</div>" :
                     "";
         }
     },
