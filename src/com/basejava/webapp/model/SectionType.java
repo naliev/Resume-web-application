@@ -103,9 +103,9 @@ public enum SectionType {
                 }
                 sb.append("<div>").
                         append("<div class='positionFromTo'>").
-                        append("<div class='From'>").append(p.getFrom()).append("</div>").
+                        append("<div class='From'>").append(DateUtil.format(p.getFrom())).append("</div>").
                         append(" - ").append("<div class='To'>").
-                        append(DateUtil.format(p.getTo())).append("</div>").
+                        append(DateUtil.format((p.getTo()))).append("</div>").
                         append("<div class='Position'>").
                         append(p.getPosition()).
                         append("</div>").
