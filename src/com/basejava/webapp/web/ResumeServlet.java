@@ -101,7 +101,8 @@ public class ResumeServlet extends HttpServlet {
             r = new Resume(fullName);
         } else {
             r = storage.get(uuid);
-            r.setFullName(fullName);
+            fullName = fullName.replaceAll("[^a-zA-Z\\d]","");
+            r.setFullName(StringUtil.isEmpty(fullName) ? "Incognito" : fullName);
         }
         if (!StringUtil.isEmpty(fullName)) {
             r.setFullName(fullName);
@@ -128,7 +129,7 @@ public class ResumeServlet extends HttpServlet {
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
                         r.addSection(type, new ListSection(Arrays.stream(value.split("\\r\\n")).
-                                filter(x-> !x.isEmpty()).toArray(String[]::new))
+                                filter(x -> !x.isEmpty()).toArray(String[]::new))
                         );
                         break;
                     case EDUCATION:
