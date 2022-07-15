@@ -20,13 +20,15 @@ public class MainStream {
         System.out.println("Min value result: " + minValue(new int[]{8, 2, 2, 3, 9}));
         System.out.println("Odd or even result: " + oddOrEven(new ArrayList<>(Arrays.asList(1, 4, 6, 8, 9, 1))));
         System.out.println("Sorted odd number: " + oddSorted(new ArrayList<>(Arrays.asList(1, 9, 8, 5, 1, 3, 6, 6))));
-        System.out.println("Prime number within array " + numberOfPrimesFromArray(new Integer[] {1,5,6,7,8,9,10}));
+        System.out.println("Prime number within array " + numberOfPrimesFromArray(new Integer[]{1, 5, 6, 7, 8, 9, 10}));
         System.out.println();
 
         System.out.println("Is sum of digits in number 1034 is odd: " + isDigitsSumIsOdd(1034));
 
         System.out.println("Number of vowel letters in string: \"Hello world!\": " + numberOfVowelsInString("Hello world!"));
 
+        System.out.println("Max of arrays: {0, 1, 3 ,5} , {-1 , 0 , 0 , -1}, {5,5,5} "
+                + max(new Integer[]{0, 1, 3, 5}) + " " + max(new Integer[]{-1, 0, 0, -1}) + " " + max(new Integer[]{5, 5, 5}));
 
         Path path = Config.getConfig().getStorageDir().toPath();
         long size;
@@ -181,21 +183,21 @@ public class MainStream {
         }).toArray(String[]::new);
     }
 
-    private static int numberOfPrimesFromArray (Integer[] array) {
+    private static int numberOfPrimesFromArray(Integer[] array) {
         Predicate<Integer> isPrime = (num) -> {
             if (num < 2) return false;
 
             for (int i = 2; i <= num / 2; i++) {
-                if (num % i == 0){
+                if (num % i == 0) {
                     return false;
                 }
             }
             return true;
         };
-        Function<Integer[], Integer> func = (a)-> {
+        Function<Integer[], Integer> func = (a) -> {
             int primeCount = 0;
-            for (int number: a) {
-                if(isPrime.test(number)) {
+            for (int number : a) {
+                if (isPrime.test(number)) {
                     primeCount++;
                 }
             }
@@ -205,7 +207,22 @@ public class MainStream {
     }
 
     private static int numberOfVowelsInString(String s) {
-        return s.length() -  s.toLowerCase().replaceAll("[aeioquy]","").length();
+        return s.length() - s.toLowerCase().replaceAll("[aeioquy]", "").length();
+    }
+
+    static <T extends Comparable<T>> T max(T[] array) {
+        if (array.length > 0) {
+            T max = array[0];
+            for (T item : array) {
+                if (max.compareTo(item) < 0) {
+                    max = item;
+                }
+            }
+            return max;
+        } else {
+            return null;
+        }
     }
 }
+
 
