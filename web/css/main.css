@@ -12,10 +12,8 @@ figure, figcaption, footer, header, hgroup,
 menu, nav, output, ruby, section, summary,
 time, mark, audio, video {
     margin: 0;
-    padding: 0;
     border: 0;
     font-size: 100%;
-    vertical-align: baseline;
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
@@ -24,6 +22,7 @@ footer, header, hgroup, menu, nav, section {
 }
 body {
     line-height: 1;
+    margin: 1em;
 }
 ol, ul {
     list-style: none;
@@ -78,7 +77,7 @@ header a.active, header a:hover{
 
 nav{
     display:flex;
-    padding:15px;
+    padding-top:15px;
 }
 
 #menu li::after{
@@ -92,6 +91,18 @@ nav{
     content:'';
     margin-left:0;
 }
+
+.bloko-columns-wrapper{
+    margin: 0 8em;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+section {
+    margin-top: 10%;
+}
+
+.small{}
 
 .large img{
     height: 80px;
@@ -107,10 +118,14 @@ a,
 img,
 li,
 .fa{
-    transition: .6s all;
-    -moz-transition: .6s all;
-    -webkit-transition: .6s all;
-    -o-transition: .6s all;
+    transition: .2s all;
+    -moz-transition: .2s all;
+    -webkit-transition: .2s all;
+    -o-transition: .2s all;
+}
+
+.contact-link{
+    color: #169FE1
 }
 
 .clean{
@@ -127,10 +142,6 @@ li,
     color:#000;
 }
 
-section{
-    margin-top:115px;
-}
-
 #left{
     display:inline-block;
     width:70%;
@@ -143,24 +154,19 @@ section{
 #middle{
     display:inline-block;
     width:70%;
-    margin-left:100px;
-    margin-top: 100px;
+    margin: 0 8em;
     vertical-align:middle;
     color:black;
 }
 
-#left h2{
+#middle h2{
     font-size:2.5em;
     text-shadow:1px 1px 2px grey;
+    width: 80%;
 }
 
 h3 {
     margin: 1em 0;
-}
-
-section img{
-    width: 100%;
-    background-size:cover;
 }
 
 footer{
@@ -174,46 +180,3 @@ footer{
     flex-wrap: wrap;
     align-items: center;
 }
-
-.positionFromTo {
-    display: flex;
-    margin-top: 10px;
-}
-
-.position {
-    font-weight: bold;
-    margin: 0 1rem 0;
-}
-
-.section-wrapper {
-    margin: 5px 1rem 5px;
-}
-
-.tabs { width: 100%; padding: 0; margin: 0 auto; }
-.tabs>input { display: none; }
-.tabs>div {
-    display: none;
-    padding: 12px;
-    border: 1px solid #C0C0C0;
-    background: #FFFFFF;
-}
-.tabs>label {
-    display: inline-block;
-    padding: 7px;
-    margin: 0 -5px -1px 0;
-    text-align: center;
-    color: #666666;
-    border: 1px solid #C0C0C0;
-    background: #E0E0E0;
-    cursor: pointer;
-}
-.tabs>input:checked + label {
-    color: #000000;
-    border: 1px solid #C0C0C0;
-    border-bottom: 1px solid #FFFFFF;
-    background: #FFFFFF;
-}
-#tab_1:checked ~ #txt_1,
-#tab_2:checked ~ #txt_2,
-#tab_3:checked ~ #txt_3,
-#tab_4:checked ~ #txt_4 { display: block; }
