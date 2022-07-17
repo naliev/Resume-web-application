@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-<div style="text-align: center; width: 100%" id="middle">
+<div style="text-align: center; width: 100%; font-size:2.5em; text-shadow:1px 1px 2px grey;">
 <h2>This is my first created html page about my first java app</h2>
 </div>
 <div style="margin-top: 2%" class="bloko-columns-wrapper">
@@ -23,11 +23,15 @@
         the basic principles of how each type works, finding key differences and the best option for specific cases
         (cases of storing and using a dataset in my resume set cases).
     </p>
-    <p>After working through the skeleton of my application, determining the right level of abstraction,
-        and getting the first console working version, I needed to gain a foothold
-        and not let new improvements break the already working code.
-        So, I learned what unit testing is, in the project I used version 4 of the JUnit framework.
-    </p>
+    <div style="display: inline-block">
+        <p><img src="img/resumeTestData.png" style="float: right; margin: 0 0.5em 0.5em 0.5em; width: 25%;"/>
+            After working through the skeleton of my application, determining the right level of abstraction,
+            and getting the first console working version, I needed to gain a foothold
+            and not let new improvements break the already working code.
+            So, I learned what unit testing is, in the project I used version 4 of the JUnit framework.
+            <img src="img/resumeObjectModel.jpg" style="float: left; margin: 0 0.5em 0.5em 0.5em; width: 70%;"/>
+        </p>
+    </div>
     <p>There comes a point where I realize that I can't initialize my list of resumes from scratch every time
         I need to do something with it, so I started working with the filesystem through the File and Path API
         and then with (G)JSON and xml serialization.
@@ -48,11 +52,14 @@
     <p>Actually, the project was almost over at this point, adding css for a beautiful output and
         uploading the application to the Heroku cloud service was a cakewalk.
     </p>
-    <p>As a bonus, I received a certificate of completion of the course, it says "with honors",
+    <p><img src="img/certificate.png" style="float: right; margin: 0 0.5em 0.5em 0.5em;width: 50%;"/>
+        As a bonus, I received a
+        <a href="https://javaops.ru/certificate/basejava?lang=en&email=dudadead@gmail.com">certificate</a>
+        of completion of the course, it says "with distinction",
         but to tell the truth, sometimes I had to submit the solution to my homework two or three times,
-        what then can be "honor" after that?
+        what then can be "distinction" after that?
     </p>
-    <img/>
+
 </div>
 </body>
 </html>
