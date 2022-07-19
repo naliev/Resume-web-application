@@ -101,8 +101,8 @@ public class ResumeServlet extends HttpServlet {
             r = new Resume(fullName);
         } else {
             r = storage.get(uuid);
-            fullName = fullName.replaceAll("[^a-zA-Z\\d]","");
-            r.setFullName(StringUtil.isEmpty(fullName) ? "Incognito" : fullName);
+            String cleanFullName = fullName.replaceAll("[^a-zA-Z\\d]","");
+            r.setFullName(StringUtil.isEmpty(cleanFullName) ? "Incognito" : fullName);
         }
         if (!StringUtil.isEmpty(fullName)) {
             r.setFullName(fullName);
