@@ -39,22 +39,32 @@ public class ResumeTestData {
     public static Resume newResumeWithSectionsNaliev(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
         resume.addContact(ContactType.EMAIL, "dudadead@gmail.com");
-        resume.addContact(ContactType.GITHUB, "Naliev");
-        resume.addSection(SectionType.PERSONAL, new TextSection("Easy-going, polite person"));
-        String[] qualificationList = {"Arrays", "Collections", "jUnit 4", "Exceptions", "Reflection", "Generics",
-                "logging", "Template method", "Singleton method"};
-        resume.addSection(SectionType.QUALIFICATIONS, new ListSection(new ArrayList<>(Arrays.asList(qualificationList))));
+        resume.addContact(ContactType.PHONE_NUMBER, "+7 981 506 38 81");
+        resume.addContact(ContactType.GITHUB, "https://github.com/naliev");
+        resume.addSection(SectionType.PERSONAL, new TextSection("Responsible, polite and just a good person. I am always looking to learn new things."));
+        String[] qualificationList = {"Object model", "Collections", "I/O system", "Serialization", "PostgreSQL", "Servlets",
+                "JSP/JSTL", "Web containers", "JUnit 4", "Git"};
+        String[] achievementList = {"Developed a warehouse logistics system - accounting for goods, automation of warehouse accounting.",
+                "Organized web integration with the \"Mercury\" system, which later \"Mercury\" itself bought from me",
+                "Developed a large accounting system for a foreign customer"
+        };
+        resume.addSection(SectionType.ACHIEVEMENT, new ListSection(achievementList));
+        resume.addSection(SectionType.QUALIFICATIONS, new ListSection(qualificationList));
 
-        Organization vogu = new Organization("Vologda university", "Vologda university", "");
+        Organization vogu = new Organization("Vologda university", "Vologda university", "https://vogu35.ru/");
         vogu.addPeriod(new Period(DateUtil.of(2017, Month.JULY), DateUtil.of(2017, Month.SEPTEMBER),
                 "Preliminary Courses", ""));
         vogu.addPeriod(new Period(DateUtil.of(2017, Month.SEPTEMBER), DateUtil.of(2021, Month.JUNE),
                 "Undergraduate","Informatics and Computer Engineering"));
         Organization javaOps = new Organization("JavaOps", "JavaOps", "https://javaops.ru/");
-        javaOps.addPeriod(new Period(DateUtil.of(2022, Month.MAY), DateUtil.NOW,
-                "BaseJava", "Create a resume repository project"));
+        javaOps.addPeriod(new Period(DateUtil.of(2022, Month.MAY), DateUtil.of(2022, Month.JULY),
+                "BaseJava", "Created a web application of resume database"));
         resume.addSection(SectionType.EDUCATION, new OrganizationSection(new ArrayList<>(Arrays.asList(vogu, javaOps))));
 
+        Organization rarus = new Organization("Rarus International", "Rarus International", "https://1c-rarus.com/");
+        rarus.addPeriod(new Period(DateUtil.of(2021, Month.SEPTEMBER), DateUtil.NOW, "Developer",
+                "Development and support of domestic and foreign solutions on the 1C: Enterprise platform."));
+        resume.addSection(SectionType.EXPERIENCE, new OrganizationSection(rarus));
         return resume;
     }
 
